@@ -12,7 +12,8 @@ In the paper, "**Comparative whole metagenome sequencing analysis in lesional an
 [Kneaddata](https://github.com/biobakery/kneaddata) was used within the [Biobakery workflows](https://github.com/biobakery/biobakery/wiki/biobakery_workflows) to perform the quality control, removal of adapters/indices/barcodes, low complexity reads/TRF, low quality bases/reads, human host contamination.
 
 ## Taxonomic Profiling - [Metaphlan v4.0](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4)
-
+Adapted parameters from default 
+--q_stat 0.1
 
 ## Functional profiling - [Humann v3.6](https://github.com/biobakery/biobakery/wiki/humann3)
 Adapted parameters from default
