@@ -1,6 +1,6 @@
 # Psoriasiscapitis_WMS
 
-This repo contains the codebase and pipelines that were used to conduct the analyses presented in our paper titled "**Comparative whole metagenome sequencing analysis in lesional and non-lesional scalp areas of psoriasis capitis patients and healthy individuals**". To perform the (pre)processing of the Psoriasis capitis metagenomics data, we used the Biobakery pipelines (qc, taxonomic, and functional profiling). In addition, the rmd file is provided that was used to create barcharts, perform diversity analyses, differential abundance analyses ([MaAsLin2](https://github.com/biobakery/biobakery/wiki/maaslin2)) on the metagenomics data, and analyse the 16S qPCR data. 
+This repo contains the codebase and references to the pipelines that were used to conduct the analyses presented in our paper titled "**Comparative whole metagenome sequencing analysis in lesional and non-lesional scalp areas of psoriasis capitis patients and healthy individuals**". To perform the (pre)processing of the Psoriasis capitis metagenomics data, we used the Biobakery pipelines (qc, taxonomic, and functional profiling). In addition, the rmd file is provided that was used to create barcharts, perform diversity analyses, differential abundance analyses ([MaAsLin2](https://github.com/biobakery/biobakery/wiki/maaslin2)) on the metagenomics data, and analyse the 16S qPCR data. 
 
 # Information about the paper
 
