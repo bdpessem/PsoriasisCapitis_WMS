@@ -29,7 +29,7 @@ Specialised gene family alignments were conducted using Diamond BLASTX to annota
 For the annotation of virulence factors (VFs) and antimicrobial resistance (AMR) genes to whole genome metagenomic sequencing data, we refer to the following [repo](https://github.com/stefftaelman/metagenomics-functional-annotation.git).
 
 ## Datasets and Data analysis of processed metagenomics data and 16S rRNA qPCR data
-The "datasets" directory houses tables containing relative abundance data and estimated read counts for taxonomic profiling, functional profiling, as well as the annotation of VF (Virulence Factors) and AMR (Antimicrobial Resistance) genes. Moreover, you can find 16S rRNA gene data within the same "datasets" folder. The statistical data analysis is provided in the "Data_analysis_Psoriasis_study.Rmd" file.
+The "datasets" directory houses tables containing relative abundance data and estimated read counts for taxonomic profiling, functional profiling, as well as the annotation of VF (Virulence Factors) and AMR (Antimicrobial Resistance) genes. Moreover, you can find 16S rRNA gene data within the same "datasets" folder. These datasets are crucial for reproducing the results and drawing further insights. The statistical data analysis is provided in the "Data_analysis_Psoriasis_study.Rmd" file.
 
 # Reference
 
