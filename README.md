@@ -21,7 +21,6 @@ Metagenomic profiles were taxonomically profiled using MetaPhlAn 4, a tool that 
 In addition, we have performed taxonomic profiling using [Metaphlan v3.0](https://github.com/biobakery/biobakery/wiki/metaphlan3) and [Metaphlan v3.1](https://github.com/biobakery/biobakery/wiki/metaphlan3) and adapted the quantile value for robust average (stat_q) to 0.1. 
 
 
-
 ## Functional profiling - [Humann v3.6](https://github.com/biobakery/biobakery/wiki/humann3)
 To functionally profile the metagenomes, we used HUMAnN v3.6 (using the database mpa_vJan21_CHOCOPhlAnSGB_202103). Nucleotide subject coverage and translated subject coverage thresholds were set to 0 to turn off the coverage filtering and increase the number of reads that hit the pangenome. 
 
@@ -29,8 +28,8 @@ To functionally profile the metagenomes, we used HUMAnN v3.6 (using the database
 Specialised gene family alignments were conducted using Diamond BLASTX to annotate virulence factors (VFs) and antimicrobial resistance (AMR) elements. The BLASTx searches were run against the 2022 virulence factor database (VFDB) and the comprehensive antibiotic resistance database (CARD). The E-value thresholds to call a hit were based on the median E-value of BLASTX searches of 10 samples whose reads were shuffled (to retain nucleotide proportions but randomise order) (Fig. S1). The lowest E-value per read was retained, and sequence variants within gene families were aggregated to result in VF and AMR element abundance tables.
 For the annotation of virulence factors (VFs) and antimicrobial resistance (AMR) genes to whole genome metagenomic sequencing data, we refer to the following [repo](https://github.com/stefftaelman/metagenomics-functional-annotation.git).
 
-## Data analysis of processed metagenomics data and 16S qPCR data
-Statistical data-analysis is given in the Data_analysis_Psoriasis_study.Rmd file. 
+## Datasets and Data analysis of processed metagenomics data and 16S rRNA qPCR data
+The "datasets" directory houses tables containing relative abundance data and estimated read counts for taxonomic profiling, functional profiling, as well as the annotation of VF (Virulence Factors) and AMR (Antimicrobial Resistance) genes. Moreover, you can find 16S rRNA gene data within the same "datasets" folder. The statistical data analysis is provided in the "Data_analysis_Psoriasis_study.Rmd" file.
 
 # Reference
 
