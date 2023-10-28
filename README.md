@@ -13,8 +13,14 @@ The datasets generated during the current study are available in the European Nu
 ## Quality Control - [Kneaddata](https://github.com/biobakery/kneaddata)
 The generated raw metagenomes were processed with KneadData by removing Illumina adapters provided in the Nextera-PE.fa file. Initially, Trimmomatic looked for seed matches (16 bases) allowing a maximum of 2 mismatches. These seeds were extended and clipped if in the case of paired end reads, a score of 30 was reached (approximately 50 bases). The reads were scanned with a 4-base wide sliding window, cutting when the average quality per base dropped below the trimming position with a Phred score <20 and discarding reads shorter than 50 nt. Human DNA was removed by using BowTie2 to map the reads against the reference genomes (Homo sapiens hg37 reference database). 
 
+The "Hostreads_kneaddata.csv" file, located within the "datasets" directory, stores the outcomes of quality control procedure.
+
 ## Taxonomic Profiling - [Metaphlan v4.0](https://github.com/biobakery/MetaPhlAn/wiki/MetaPhlAn-4)
 Metagenomic profiles were taxonomically profiled using MetaPhlAn 4, a tool that maps shotgun reads to a database of unique clade-specific markers (mpa_vOct22_CHOCOPhlAnSGB_202212) and is capable of producing species-level resolution and the relative abundances of each species/clade in a sample. We adjusted one parameter from the default parameter settings; the quantile value for the robust average (stat_q) was set to 0.1 to perform a more sensitive profiling. This parameter is used when MetaPhlAn calculates the robust average coverage of a species and defines the trimming of the marker distribution at both ends. The profiling results are based on the fraction of reads mapping against the taxonomically unique species-specific MetaPhlAn 4 markers (+-5.1 M unique clade-specific marker genes). 
+
+In addition, we have performed taxonomic profiling using [Metaphlan v3.0](https://github.com/biobakery/biobakery/wiki/metaphlan3) and [Metaphlan v3.1](https://github.com/biobakery/biobakery/wiki/metaphlan3) and adapted the quantile value for robust average (stat_q) to 0.1. 
+
+
 
 ## Functional profiling - [Humann v3.6](https://github.com/biobakery/biobakery/wiki/humann3)
 To functionally profile the metagenomes, we used HUMAnN v3.6 (using the database mpa_vJan21_CHOCOPhlAnSGB_202103). Nucleotide subject coverage and translated subject coverage thresholds were set to 0 to turn off the coverage filtering and increase the number of reads that hit the pangenome. 
