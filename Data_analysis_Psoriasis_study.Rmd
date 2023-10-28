@@ -1,0 +1,4376 @@
+---
+title: "Psoriasis capitis Metagenomics data analysis"
+author: "Britta De Pessemier"
+date: '2022-07-13'
+output: html_document
+---
+
+#install packages
+```{r setup, include=FALSE} 
+library(dplyr)
+library(ggplot2)
+library(plyr)
+library(doBy)
+library(survival)
+library(coin)
+library(ggplot2)
+library(lattice)
+library(hexbin)
+library(randomForest)
+library(ggthemes)
+library(reshape2)
+library(ca)
+library(FactoMineR)
+library(MASS)
+library(grid)
+library(missMDA)
+library(plotrix)
+library(stats)
+library(gdata)
+library(psych)
+library(corrplot)
+library(ggsignif)
+library(cowplot)
+require(reshape2)
+library(ggpubr)
+library(readr)
+library(dplyr)
+library(tibble)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(cowplot)
+library(vegan)
+library(readr)
+library(Maaslin2)
+library(tidyr)
+library(circlize)
+library(ComplexHeatmap)
+```
+
+#Fig. 4 and Fig. S4
+#1. Load in Metaphlan4 output
+#relative abundance of the species
+
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_species_relab.csv", sep=",",dec=".", row.names=1, header= TRUE )
+```
+
+
+#absolute abundance estimated number of reads species
+```{r}
+Bacterialspecies <-read.csv2("metaphlan4_merged_species_readstats.csv", sep=",",row.names=1, dec=".", header=TRUE)
+```
+
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+
+# In total 738 species were found with Metaphlan4 (q stat =0.1 or 10%)
+
+#2. select 15 most abundant species
+```{r}
+Bacterialspecies_sum <- Bacterialspecies
+selecttop20par <- rowSums(Bacterialspecies)
+Bacterialspecies <- rownames_to_column(Bacterialspecies)
+Bacterialspecies <- as.data.frame(Bacterialspecies %>% top_n(15,selecttop20par))
+#other <- 100-colSums(Bacterialspecies[,-1])
+other <- colSums(Bacterialspecies_sum)-colSums(Bacterialspecies[,-1])
+rownames(Bacterialspecies) <- Bacterialspecies$rowname
+Bacterialspecies <- Bacterialspecies[,-1]
+Bacterialspecies <- rbind(Bacterialspecies,other)
+rownames(Bacterialspecies)[nrow(Bacterialspecies)] <- "Other"
+Bacterialspecies2 <- t(Bacterialspecies)
+Bacterialspecies2<-as.data.frame(Bacterialspecies2)
+
+Bacterialspecies2$Sample_name<-rownames(t(Bacterialspecies))
+metadata$Sample_name<-rownames(metadata)
+
+Bacterialspecies2 <- inner_join(Bacterialspecies2,metadata, by = c("Sample_name"))
+
+rownames(Bacterialspecies2)<-Bacterialspecies2$Sample_name
+
+
+Bacterialspecies2  <- melt(Bacterialspecies2,id.vars=colnames(metadata))
+
+
+Bacterialspecies2$value <- as.numeric(Bacterialspecies2$value)
+```
+
+#3. Stacked bar graphs of healthy, lesional and non-lesional participants (relative abundance or absolute estimated read stats)
+
+
+# relative abundance
+```{r}
+colors_fix_bacteria <- c("s__Cutibacterium_acnes"="#003c30","s__Cutibacterium_granulosum"="#01665e", "s__Cutibacterium_namnetense"="#35978f", "s__Corynebacterium_aurimucosum"="#80cdc1","s__Corynebacterium_otitidis"="#c7eae5", "s__Staphylococcus_capitis" = "#B0C4DE", "s__Staphylococcus_saccharolyticus"="#8B8878", "s__Staphylococcus_epidermidis"="#f5f5f5",  "s__Staphylococcus_aureus"="#f6e8c3","s__GGB2722_SGB3663"= "#FFEC8B","s__Moraxella_osloensis"="#FFA54F", "s__Kocuria_rhizophila" ="#dfc27d", "s__Malassezia_globosa"="#bf812d","s__Malassezia_restricta"="#8c510a","s__Micrococcus_luteus" ="#543005", "Other"="black" )
+```
+
+#adjusted for absolute values
+```{r}
+colors_fix_bacteria <- c("s__Cutibacterium_acnes"="#003c30","s__Cutibacterium_granulosum"="#01665e", "s__Cutibacterium_namnetense"="#35978f","s__Paracoccus_yeei"="#80cdc1", "s__Staphylococcus_saccharolyticus"="#c7eae5", "s__Staphylococcus_capitis" = "#B0C4DE", "s__Staphylococcus_hominis"="#8B8878", "s__Staphylococcus_epidermidis"="#f5f5f5",  "s__Malassezia_sympodialis"="#f6e8c3","s__GGB2722_SGB3663"= "#FFEC8B","s__Moraxella_osloensis"="#FFA54F", "s__Kocuria_rhizophila" ="#dfc27d", "s__Malassezia_globosa"="#bf812d","s__Malassezia_restricta"="#8c510a","s__Micrococcus_luteus" ="#543005", "Other"="black" )
+```
+
+
+#order
+```{r}
+variable_levels <- c("s__Cutibacterium_acnes","s__Cutibacterium_granulosum", "s__Cutibacterium_namnetense", "s__Corynebacterium_aurimucosum","s__Corynebacterium_otitidis", "s__Staphylococcus_capitis" ,"s__Staphylococcus_saccharolyticus", "s__Staphylococcus_epidermidis",  "s__Staphylococcus_aureus","s__GGB2722_SGB3663","s__Moraxella_osloensis","s__Kocuria_rhizophila" , "s__Malassezia_globosa","s__Malassezia_restricta","s__Micrococcus_luteus" , "Other")
+```
+#adjusted for absolute values
+
+```{r}
+variable_levels <- c("s__Cutibacterium_acnes","s__Cutibacterium_granulosum", "s__Cutibacterium_namnetense", "s__Paracoccus_yeei","s__Staphylococcus_saccharolyticus", "s__Staphylococcus_capitis" ,"s__Staphylococcus_hominis", "s__Staphylococcus_epidermidis",  "s__Staphylococcus_aureus","s__GGB2722_SGB3663","s__Moraxella_osloensis","s__Kocuria_rhizophila" , "s__Malassezia_globosa","s__Malassezia_restricta","s__Micrococcus_luteus" , "Other")
+```
+
+
+# Correct order healthy samples
+```{r}
+Bacterialspecies_h<-Bacterialspecies2[Bacterialspecies2$Pool=="Healthy",]
+
+```
+
+```{r}
+lvls <- order(Bacterialspecies_h$variable=="s__Cutibacterium_acnes", Bacterialspecies_h$value, decreasing=TRUE)
+```
+```{r}
+Bacterialspecies_h <- Bacterialspecies_h[order(Bacterialspecies_h$variable=="s__Cutibacterium_acnes", Bacterialspecies_h$value, decreasing=TRUE),]
+
+k <- unique(Bacterialspecies_h$Sample_name)
+
+```
+
+
+
+#Order 
+```{r}
+variable_levels <- c("s__Cutibacterium_acnes","s__Cutibacterium_granulosum", "s__Cutibacterium_namnetense", "s__Corynebacterium_aurimucosum","s__Corynebacterium_otitidis", "s__Staphylococcus_capitis" ,"s__Staphylococcus_saccharolyticus", "s__Staphylococcus_epidermidis",  "s__Staphylococcus_aureus","s__GGB2722_SGB3663","s__Moraxella_osloensis","s__Kocuria_rhizophila" , "s__Malassezia_globosa","s__Malassezia_restricta","s__Micrococcus_luteus" , "Other")
+```
+
+#Relative abundance
+```{r}
+healthy_rel <- Bacterialspecies_h %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Pool) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) +  ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'), legend.position = "right") 
+```
+
+#Absolute abundance
+```{r}
+variable_levels <- c("s__Cutibacterium_acnes","s__Cutibacterium_granulosum", "s__Cutibacterium_namnetense", "s__Paracoccus_yeei","s__Staphylococcus_saccharolyticus", "s__Staphylococcus_capitis" ,"s__Staphylococcus_hominis", "s__Staphylococcus_epidermidis",  "s__Malassezia_sympodialis","s__GGB2722_SGB3663","s__Moraxella_osloensis","s__Kocuria_rhizophila" , "s__Malassezia_globosa","s__Malassezia_restricta","s__Micrococcus_luteus" , "Other")
+```
+```{r}
+healthy_rel <- Bacterialspecies_h %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) 
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Pool) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) +  ylab(expression(Log[10]~Absolute~abundance)) + theme(legend.text=element_text(size=18,face='italic'), legend.position = "right") + scale_y_continuous(trans='log10') 
+```
+
+
+
+# Lesional samples 
+
+# Correct order lesional samples
+
+```{r}
+lvls <- order(Bacterialspecies_L$variable=="s__Cutibacterium_acnes", Bacterialspecies_L$value, decreasing=TRUE)
+```
+```{r}
+Bacterialspecies_L <- Bacterialspecies_L[order(Bacterialspecies_L$variable=="s__Cutibacterium_acnes", Bacterialspecies_L$value, decreasing=TRUE),]
+
+k <- unique(Bacterialspecies_L$Sample_name)
+
+```
+
+#relative abundance
+```{r}
+lesional_rel <- Bacterialspecies_L %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'), legend.position= "right") 
+```
+
+#absolute abundance
+```{r}
+lesional_rel <- Bacterialspecies_L %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab(expression(Log[10]~Absolute~abundance))  + theme(legend.text=element_text(size=18,face='italic'), legend.position= "right") +scale_y_continuous(trans='log10')
+```
+
+```{r}
+ggsave("barchart_lesional_pp_qstat10_metaphlan4_relative.png", units="in", width=13, height=11, dpi=400, bg="white")
+```
+
+
+# Non-lesional samples
+
+```{r}
+Bacterialspecies_NL<-Bacterialspecies2[Bacterialspecies2$Body_site_2=="Non_Lesional",]
+
+```
+#Correct order of Non-lesional samples
+
+```{r}
+lvls <- order(Bacterialspecies_NL$variable=="s__Cutibacterium_acnes", Bacterialspecies_NL$value, decreasing=TRUE)
+```
+```{r}
+Bacterialspecies_NL <- Bacterialspecies_NL[order(Bacterialspecies_NL$variable=="s__Cutibacterium_acnes", Bacterialspecies_NL$value, decreasing=TRUE),]
+
+k <- unique(Bacterialspecies_NL$Sample_name)
+
+```
+
+
+
+```{r}
+nonlesional_rel <- Bacterialspecies_NL %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'), legend.position="right") #+ scale_y_continuous(trans='log10')# add for Log10(Absolute abundance) ylab("Relative abundance") #ylab(Log[10]~Absolute~abundance)
+```
+
+#absolute abundance
+```{r}
+nonlesional_rel <- Bacterialspecies_NL %>% 
+  dplyr::mutate(
+    across(c(Sample_name, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample_name, ~ forcats::fct_relevel(.,k)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  group_by(Sample_name, value) %>% 
+  ggplot(aes(x = Sample_name, y = value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =35, face="bold"), axis.title.y = element_text(size=26),axis.title.x = element_text(size=26)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab(Log[10]~Absolute~abundance) + theme(legend.text=element_text(size=18,face='italic'), legend.position="right") + scale_y_continuous(trans='log10')# add for Log10(Absolute abundance) ylab("Relative abundance") #ylab(Log[10]~Absolute~abundance)
+```
+```{r}
+ggsave("barchart_nonlesional_pp_qstat10_metaphlan4_relative.png", units="in", width=13, height=11, dpi=400, bg="white")
+```
+
+```{r}
+# Add labels to each plot
+plot_H_labeled <- healthy_rel + labs(tag = "A") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_L_labeled <- lesional_rel + labs(tag = "B") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_NL_labeled <- nonlesional_rel + labs(tag = "C") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_empty <-ggplot()
+```
+
+
+```{r}
+# Combine the legend of the three plots
+combined_legend <- cowplot::get_legend(plot_H_labeled)  # Assuming plot_H_labeled has the legend
+
+# Remove the legends from individual plots
+plot_H_labeled <- plot_H_labeled + theme(legend.position = "none")
+plot_L_labeled <- plot_L_labeled + theme(legend.position = "none")
+plot_NL_labeled <- plot_NL_labeled + theme(legend.position = "none")
+```
+
+
+
+```{r}
+# Create the grid with the aligned plots and the combined legend
+grid <- plot_grid(plot_H_labeled,
+                  plot_grid(plot_L_labeled, plot_NL_labeled, ncol = 2),
+                  #combined_legend, #,align = "hv",
+                  ncol = 1,
+                  rel_heights = c(1, 1, 0.2))
+```
+
+#Save Fig. 4
+```{r}
+# Save the figure with adjusted dimensions and legend settings
+ggsave("figure_taxonomy_healthy_lesional_nonlesional_relativeabundance_metaphlan_.png",
+       plot = grid,
+       units = "in",
+       width = 10,  # Adjust the width as needed
+       height = 15,  # Adjust the height as needed
+       dpi = 300,
+       bg = "white",
+       scale = 1.5)  # Increase the scale factor to improve legend readability
+
+```
+
+
+# Beta-diversity Metaphlan4 matrix & differential abundance analysis using MaAsLin2
+#Fig. 3 and Fig. 5
+
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_species_relab.csv", sep=",",dec=".", row.names=1, header= TRUE )
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+```{r}
+Bacterialspecies_2 <- Bacterialspecies
+```
+
+```{r}
+### Structure metagenomics table
+
+# 1) Divide all values in metagenomics table by 100 to get relative abundances
+Bacterialspecies_2 = Bacterialspecies[,1:ncol(Bacterialspecies)]/100
+
+colSums(Bacterialspecies_2)
+
+# 2) In the metagenomics table, rows should be sampleID's and columns taxa
+# transpose metagenomics table
+Bacterialspecies_2t = as.data.frame(t(Bacterialspecies_2))
+#colnames(Bacterialspecies_2t) = Bacterialspecies_2t[1,]
+#Bacterialspecies_2t = Bacterialspecies_2t[-1,]
+# convert character data frame to numeric
+Bacterialspecies_input = data.frame(lapply(Bacterialspecies_2t,as.numeric))
+rownames(Bacterialspecies_input) = rownames(Bacterialspecies_2t)
+# check all rows sum up to 1
+rowSums(Bacterialspecies_input)
+
+```
+#INTER: Lesional 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+
+
+```
+
+
+```{r}
+inter_dist_1 <- bray_dist[lower.tri(bray_dist)]
+inter_dist_1_no_na <- na.omit(inter_dist_1)
+mean_inter_1 <- mean(inter_dist_1_no_na)
+```
+
+
+#INTER: Non-Lesional 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+
+
+```{r}
+inter_dist_2 <- bray_dist[lower.tri(bray_dist)]
+inter_dist_2_no_na <- na.omit(inter_dist_2)
+mean_inter_2 <- mean(inter_dist_2_no_na)
+```
+
+
+#INTER: Top-scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+```{r}
+inter_dist_3 <- bray_dist[lower.tri(bray_dist)]
+inter_dist_3_no_na <- na.omit(inter_dist_3)
+mean_inter_3 <- mean(inter_dist_3_no_na)
+```
+
+#INTER: Back-scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+```{r}
+inter_dist_4 <- bray_dist[lower.tri(bray_dist)]
+inter_dist_4_no_na <- na.omit(inter_dist_4)
+mean_inter_4 <- mean(inter_dist_4_no_na)
+```
+
+#Lesional vs Non-Lesional 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+# analyse multivariate homogeneity of group dispersions (variances)
+
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+
+# permanova : What is the effect of the body site if you correct for the subject ID?
+set.seed(123)
+adonis2(bray_dist ~  subjectID + Body_site, data = metadata_filt, method = "bray")
+
+
+
+
+# obtain R.adjusted values
+varpart(bray_dist, ~ subjectID, ~ Body_site, data=metadata_filt)
+
+set.seed(123)
+adonis_result10 <-adonis2(bray_dist ~  subjectID+Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values5 <- adonis_result10$`Pr(>F)`
+
+p_values5 <- p_values5[1:2]
+
+
+
+```
+```{r}
+intra_dist_1 <- bray_dist[lower.tri(bray_dist)]
+intra_dist_1_no_na <- na.omit(intra_dist_1)
+mean_intra_1 <- mean(intra_dist_1_no_na)
+```
+
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_LesionalvsNon_Lesional", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+
+
+#Top-scalp vs back-scalp 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+# analyse multivariate homogeneity of group dispersions (variances)
+
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+
+# permanova
+adonis2(bray_dist ~  subjectID + Body_site, data = metadata_filt, method = "bray")
+
+
+# obtain R.adjusted values
+varpart(bray_dist, ~ subjectID, ~ Body_site, data=metadata_filt)
+
+
+
+set.seed(123)
+adonis_result11 <-adonis2(bray_dist ~  subjectID+Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values6 <- adonis_result11$`Pr(>F)`
+
+p_values6 <- p_values6[1:2]
+
+
+
+```
+
+```{r}
+intra_dist_2 <- bray_dist[lower.tri(bray_dist)]
+intra_dist_2_no_na <- na.omit(intra_dist_2)
+mean_intra_2 <- mean(intra_dist_2_no_na)
+
+```
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_TopscalpvsBackscalp", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Top_scalp"))
+```
+
+#Lesional vs top scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+# analyse multivariate homogeneity of group dispersions (variances)
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+set.seed(123)
+# permanova
+adonis2(bray_dist ~ Body_site, data = metadata_filt, method ="bray")
+
+
+
+set.seed(123)
+adonis_result12 <-adonis2(bray_dist ~  Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values7 <- adonis_result12$`Pr(>F)`
+
+p_values7 <- p_values7[1]
+
+
+
+
+```
+
+```{r}
+no_dist_1 <- bray_dist[lower.tri(bray_dist)]
+no_dist_1_no_na <- na.omit(no_dist_1)
+mean_no_dist_1 <- mean(no_dist_1_no_na)
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_Lesionalvstopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+#Lesional vs back scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+#Lesional vs Back_scalp
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+# analyse multivariate homogeneity of group dispersions (variances)
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+
+# permanova
+adonis2(bray_dist ~ Body_site, data = metadata_filt, method ="bray")
+
+
+set.seed(123)
+adonis_result13<-adonis2(bray_dist ~  Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values8 <- adonis_result13$`Pr(>F)`
+
+p_values8 <- p_values8[1]
+
+
+
+```
+
+```{r}
+no_dist_2 <- bray_dist[lower.tri(bray_dist)]
+no_dist_2_no_na <- na.omit(no_dist_2)
+mean_no_dist_2 <- mean(no_dist_2_no_na)
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_Lesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+#Non_Lesional vs top scalp
+
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray
+
+# analyse multivariate homogeneity of group dispersions (variances)
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+
+# permanova
+adonis2(bray_dist ~ Body_site, data = metadata_filt, method ="bray")
+
+
+set.seed(123)
+adonis_result14<-adonis2(bray_dist ~  Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values9 <- adonis_result14$`Pr(>F)`
+
+p_values9 <- p_values9[1]
+
+
+```
+
+```{r}
+no_dist_3 <- bray_dist[lower.tri(bray_dist)]
+no_dist_3_no_na <- na.omit(no_dist_3)
+mean_no_dist_3 <- mean(no_dist_3_no_na)
+```
+
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_NonLesionalvstopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+#Non_lesional vs Back_scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_filt2 = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+
+
+
+# calculate dissimilarities
+bray_dist = vegdist(x = Bacterialspecies_input_filt2, method = "bray") # adjust method jaccard or bray #here you are
+
+# analyse multivariate homogeneity of group dispersions (variances)
+anova(betadisper(bray_dist, metadata_filt$Body_site))
+
+# permanova
+adonis2(bray_dist ~ Body_site, data = metadata_filt, method ="bray")
+
+
+
+set.seed(123)
+adonis_result15<-adonis2(bray_dist ~  Body_site, data = metadata_filt, method = "bray")
+
+# Extract the p-values from the adonis result
+p_values10 <- adonis_result15$`Pr(>F)`
+
+p_values10 <- p_values10[1]
+
+
+
+
+```
+```{r}
+no_dist_4 <- bray_dist[lower.tri(bray_dist)]
+no_dist_4_no_na <- na.omit(no_dist_4)
+mean_no_dist_4 <- mean(no_dist_4_no_na)
+```
+```{r}
+fit_data = Maaslin2(
+    input_data = Bacterialspecies_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_metaphlan4qstat10_NonLesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#fdr corrected p_values
+```{r}
+
+#store all p_values in vector
+
+my_vector <- c(p_values5, p_values6, p_values7, p_values8, p_values9,p_values10)
+# Apply FDR correction to the p-values
+fdr_corrected_p_values <- p.adjust(my_vector, method = "fdr")
+
+# Print the FDR-corrected p-values
+fdr_corrected_p_values
+
+```
+
+
+```{r}
+
+# Create a matrix with specified data elements and dimensions
+matrix_data <- matrix(data = c(mean_inter_1, mean_intra_1, mean_no_dist_1,mean_no_dist_2, NA,mean_inter_2, mean_no_dist_3, mean_no_dist_4, NA, NA,   mean_inter_3,mean_intra_2, NA, NA, NA,  mean_inter_4), nrow = 4, ncol = 4)
+
+# Add column names
+col_names <- c("lesional", "non-lesional", "top-scalp", "back-scalp")
+colnames(matrix_data) <- col_names
+
+# Add row names
+row_names <- c("lesional", "non-lesional", "top-scalp", "back-scalp")
+rownames(matrix_data) <- row_names
+
+# Convert matrix to data frame
+df <- data.frame(matrix_data)
+df$row_names <- row_names
+
+# Reshape the data frame into long format
+df_long <- reshape2::melt(df, id.vars = "row_names")
+
+```
+
+#Figure 3A
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+# Create a data frame from the matrix
+df <- data.frame(row = factor(rep(row_names, times = ncol(matrix_data)), levels = rev(row_names)),
+                 col = factor(rep(col_names, each = nrow(matrix_data)), levels = col_names),
+                 value = as.vector(matrix_data))
+
+# Create the heatmap using ggplot
+heatmap <- ggplot(df, aes(x = col, y = row, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradientn(colors = rev(brewer.pal(11, "BrBG")), na.value = "white") +
+  #geom_text(aes(label = round(value, 2)), color = "white") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size=18, angle = 45, vjust = 1, hjust = 1),axis.text.y = element_text(size=18),
+        panel.grid = element_blank(), legend.title= element_text(size=20), legend.text = element_text(size=15),
+        legend.position = "right") +
+  labs(fill = "Mean Bray-curtis distance", x = "", y = "")
+
+# Display the heatmap
+print(heatmap)
+
+```
+#save Fig. 3
+```{r}
+ggsave("beta-diversity_matrix_rev.png", units="in", width=12, height=7, dpi=400, bg="white")
+```
+
+
+#Fig. 3B: Beta-diversity boxplots
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_species_relab.csv", sep=",",dec=".", row.names=1, header= TRUE )
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+```{r}
+Bacterialspecies_2 <- Bacterialspecies
+```
+
+```{r}
+### Structure metagenomics table
+
+# 1) Divide all values in metagenomics table by 100 to get relative abundances
+Bacterialspecies_2 = Bacterialspecies[,1:ncol(Bacterialspecies)]/100
+#Bacterialspecies_2 = cbind(Bacterialspecies$bug, Bacterialspecies_2)
+# check
+colSums(Bacterialspecies_2)
+
+# 2) In the metagenomics table, rows should be sampleID's and columns taxa
+# transpose metagenomics table
+Bacterialspecies_2t = as.data.frame(t(Bacterialspecies_2))
+#colnames(Bacterialspecies_2t) = Bacterialspecies_2t[1,]
+#Bacterialspecies_2t = Bacterialspecies_2t[-1,]
+# convert character data frame to numeric
+Bacterialspecies_input = data.frame(lapply(Bacterialspecies_2t,as.numeric))
+rownames(Bacterialspecies_input) = rownames(Bacterialspecies_2t)
+# check all rows sum up to 1
+rowSums(Bacterialspecies_input)
+
+```
+
+#INTER: Lesional 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_lesional = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist_lesional = vegdist(x = Bacterialspecies_input_lesional, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+#INTER: Non_Lesional 
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_nonlesional = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist_nonlesional = vegdist(x = Bacterialspecies_input_nonlesional, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+
+#INTER: Top_scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_topscalp = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist_topscalp= vegdist(x = Bacterialspecies_input_topscalp, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+#INTER: Back_scalp
+
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+Bacterialspecies_input_filt = Bacterialspecies_input
+```
+
+
+```{r}
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+
+# select sample ids in metagenomics table
+Bacterialspecies_input_backscalp = Bacterialspecies_input_filt[rownames(Bacterialspecies_input_filt) %in% keep, ] 
+
+# calculate dissimilarities
+bray_dist_backscalp = vegdist(x = Bacterialspecies_input_backscalp, method = "bray") # adjust method jaccard or bray
+
+
+```
+
+```{r}
+# Flatten the dissimilarity matrices into vectors
+vec_group1 <- as.vector(bray_dist_lesional)
+vec_group2 <- as.vector(bray_dist_nonlesional)
+vec_group3 <- as.vector(bray_dist_topscalp)
+vec_group4 <- as.vector(bray_dist_backscalp)
+```
+
+
+```{r}
+# Assuming you have the following dissimilarity matrices
+dissimilarity_matrices <- list(
+  Lesional = bray_dist_lesional,
+  Non_Lesional = bray_dist_nonlesional,
+  Top_scalp= bray_dist_topscalp,
+  Back_scalp = bray_dist_backscalp
+)
+
+# Create a list to store flattened dissimilarity vectors and group labels
+dissimilarity_list <- list()
+group_labels <- character()
+
+# Flatten the dissimilarity matrices and store in the list
+for (group in names(dissimilarity_matrices)) {
+  dissimilarity_vector <- as.vector(dissimilarity_matrices[[group]])
+  dissimilarity_list[[group]] <- dissimilarity_vector
+  group_labels <- c(group_labels, rep(group, length(dissimilarity_vector)))
+}
+
+# Create a dataframe
+dissimilarity_df <- data.frame(
+  Dissimilarity = unlist(dissimilarity_list),
+  Body_site= group_labels
+)
+
+# Print the first few rows of the dataframe
+print(head(dissimilarity_df))
+
+```
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+
+
+```{r}
+dissimilarity_df$Body_site <- factor(dissimilarity_df$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+```
+
+# Fig. 3B - Beta diversity
+```{r}
+
+log_decontam<-ggplot(subset(dissimilarity_df ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = Dissimilarity, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) +#scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab("Bray-Curtis Dissimilarity") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=18),axis.text.y=element_text(size=14),axis.text.x=element_text(size=14))+guides(fill=FALSE)+ 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=4)
+  
+```
+
+
+#save Fig. 3B
+```{r}
+ggsave("Psoriasiscapitis_bray_curtisdissimilarity_linear.png", units="in", width=6, height=7, dpi=400, bg="white")
+```
+
+
+# Fig S.5: Beta-diversity PCoA plots
+
+
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_species_relab.csv", sep=",",dec=".", row.names=1, header= TRUE )
+mpa_table<- Bacterialspecies
+```
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+```{r}
+colSums(mpa_table)
+
+```
+```{r}
+### Data transformation
+mpa_table <- mpa_table / 100
+
+```
+
+
+```{r cars}
+
+bug_mat = mpa_table|> 
+  as.matrix() |>
+  t()
+
+```
+
+
+# Change method to jaccard vs bray-curtis
+```{r pressure, echo=FALSE}
+#dist_mat = vegdist(bug_mat)
+dist_mat = vegdist(bug_mat, method="jaccard")
+cmd_res = cmdscale(dist_mat, 
+                   k = (nrow(bug_mat) - 1),
+                   eig = TRUE)
+
+str(cmd_res)
+```
+
+
+
+```{r}
+pcoa_df = tibble(PC1 = cmd_res$points[,1], 
+                 PC2 = cmd_res$points[,2])
+```
+
+
+```{r}
+eigenvalues <- cmd_res$eig
+total_variance <- sum(eigenvalues)
+variance_PC1 <- eigenvalues[1]
+variance_PC2 <- eigenvalues[2]
+percent_explained_PC1 <- (variance_PC1 / total_variance) * 100
+percent_explained_PC2 <- (variance_PC2 / total_variance) * 100
+```
+
+```{r}
+# Create a label for PC1 and PC2
+pc1_label <- paste("PCoA[1]", sprintf("%.2f%%", percent_explained_PC1))
+pc2_label <- paste("PCoA[2]", sprintf("%.2f%%", percent_explained_PC2))
+
+```
+
+
+```{r}
+pcoa_meta = bind_cols(pcoa_df, metadata)
+
+pcoa_meta
+```
+
+
+
+```{r}
+pcoa_meta_new <- pcoa_meta                             # Duplicate data
+pcoa_meta_new$Body_site <- factor(pcoa_meta_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+```
+
+```{r}
+p_diag = ggplot(pcoa_meta_new,
+                aes(x = PC1, y = PC2, color = Body_site)) + geom_point(aes(shape = Pool, fill=Body_site), size = 3) +  scale_colour_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))+ labs(title = "PCoA - Jaccard") +labs(x = pc1_label, y = pc2_label)
+
+p_diag
+```
+```{r}
+p_jaccard <- p_diag
+
+p_bray <- p_diag
+```
+
+```{r}
+figure <- ggarrange(p_jaccard, p_bray, ncol = 2, nrow = 1,common.legend = TRUE, legend ="right",align="hv", labels=c("A","B"), font.label=list(size=17))
+```
+
+save Fig S.5 
+```{r}
+ggsave("bray_curtis_jaccard_PCoA.png", units="in", width=10, height=5, dpi=400, bg="white")
+```
+
+
+```{r setup, include=FALSE}
+library(tidyr)
+library(ComplexHeatmap)
+library(circlize)
+```
+
+## Fig.5 Complex heatmap on the output of the Metaphlan4 species output
+# Heatmap - species over and under-represented in lesional and/or non-lesional skin compared to top and back scalp
+
+```{r}
+data_plot_arranged = data.table::fread("maaslin2_18082023.csv", dec=",")
+myplot = data_plot_arranged
+
+```
+
+
+```{r pressure, echo=FALSE}
+# create matrix for heatmap
+plot_matrix = as.data.frame(cbind(myplot$feature, myplot$value, myplot$heatmap_value))
+names(plot_matrix) = c("feature", "value", "Heatmap_value")
+
+```
+
+
+```{r}
+# transform from long format to wide format
+plot_matrix_wide <- spread(plot_matrix, value, Heatmap_value)
+plot_matrix_wide <- plot_matrix_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+
+plot_matrix_wide2 = apply(as.matrix(plot_matrix_wide), 2, as.numeric)
+rownames(plot_matrix_wide2) = rownames(plot_matrix_wide)
+```
+
+```{r}
+# arrange column order for plot
+col.order <- c( "Lesional vs Back_scalp", "Lesional vs Top_scalp", "Lesional vs Non_Lesional", "Non_Lesional vs Back_scalp", "Non_Lesional vs Top_scalp", "Top_scalp vs Back_scalp")
+plot_matrix_wide2 = plot_matrix_wide2[,col.order]
+```
+
+library(circlize)
+
+```{r}
+col_fun = colorRamp2(c(-7, 0, 7), c("blue", "#EEEEEE", "red"), space = "RGB")
+```
+
+```{r}
+# replace NA by 0 in df for clustering
+plot_matrix_wide3 = plot_matrix_wide2
+plot_matrix_wide3[is.na(plot_matrix_wide3)] <- 0
+```
+```{r}
+plot_matrix2 = as.data.frame(cbind(myplot$feature,myplot$value, myplot$qval))
+names(plot_matrix2) = c("feature","value", "qval")
+```
+
+```{r}
+# transform from long format to wide format
+matrix_anno_wide <- spread(plot_matrix2, value, qval)
+matrix_anno_wide <- matrix_anno_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+matrix_anno_wide2 = apply(as.matrix(matrix_anno_wide), 2, as.numeric)
+rownames(matrix_anno_wide2) = rownames(matrix_anno_wide)
+```
+```{r}
+matrix_anno_wide2 = matrix_anno_wide2[,col.order]
+matrix_anno_wide3 = matrix_anno_wide2
+matrix_anno_wide3[is.na(matrix_anno_wide3)] <- 1
+```
+library(ComplexHeatmap)
+
+```{r}
+# adjust main legend here with heatmap_legend_param
+p = Heatmap(plot_matrix_wide3, name = "-sign(beta)*log(qval)", col = col_fun, na_col = "white", 
+            #clustering_distance_rows = "pearson",
+            row_dend_side = "left", row_dend_width = unit(1, "cm"), 
+            show_column_dend = FALSE,
+            row_names_side = "right", 
+            rect_gp = gpar(col = "white", lwd = 2),
+            border_gp = gpar(col = "black", lty = 1),
+            row_names_gp = gpar(fontsize = 8, fontface = "italic"),
+            column_names_gp = gpar(fontsize = 8), column_names_rot = -60,  # this includes the annotation of the graph!
+            width = ncol(plot_matrix_wide3)*unit(8, "mm"), # adjust cell size in heatmap
+            height = nrow(plot_matrix_wide3)*unit(4, "mm"), # adjust cell size in heatmap
+            row_title = "Species (N=15)",
+            row_title_gp = gpar(fontsize = 8, fontface = 2),
+            row_title_side = "left",
+            heatmap_legend_param = list(title_gp = gpar(fontsize = 8,fontface = 2), labels_gp = gpar(fontsize = 8), at = c(-7, -3.5, 0, 3.5, 7),legend_direction = "horizontal", border='black') ,
+            column_order = colnames(plot_matrix_wide2),
+            cell_fun = function(j, i, x, y, w, h, fill) {
+              if(matrix_anno_wide3[i, j] < 0.001) {
+                grid.text('***', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.01){
+                grid.text('**', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.05) {
+                grid.text('*', x, y-h*0.01, gp = gpar(fontsize = 6))
+              }}
+)
+p = draw(p, heatmap_legend_side="left", annotation_legend_side="left") 
+p 
+
+```
+#save Fig. 5
+
+```{r}
+tiff("Figure5.tiff", units='mm', width=140, height=100, res=450, compression="lzw")
+p
+dev.off()
+```
+
+
+
+# Fig. S7. Create pie-charts of Metaphlan4 data 
+
+# Metadata
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+#Load in metaphlan species data with q stat = 10%
+
+#Species level: 738 species were found 
+
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_species_relab.csv", sep=",",dec=".", row.names=1, header= TRUE )
+```
+
+# Metaphlan4 Genera data 
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_genera_relab.csv", sep=",",dec=".", row.names =1, header= TRUE )
+```
+# Metaphlan4 Kingdom data
+```{r}
+
+Bacterialspecies <- read.csv2("metaphlan4__kingdom_relab.csv", sep=",",dec=".", row.names =1, header= TRUE )
+
+```
+# Metaphlan4 Kingdom data including unclassified fraction
+```{r}
+
+Bacterialspecies <- read.csv2("metaphlan4_kingdom_unclassified.csv", sep=",",dec=".", row.names =1, header= TRUE )
+
+```
+#Metaphlan3 v31 Kingdom data including unclassified data
+```{r}
+Bacterialspecies <- read.csv2("metaphlan3_unclassified_v31_kingdom.csv", sep=",",dec=".", row.names =1, header= TRUE )
+```
+
+
+#Metaphlan3 v30 Kingdom data including unclassified data 
+```{r}
+Bacterialspecies <- read.csv2("metaphlan3_unclassified_v30_kingdom.csv", sep=",",dec=".", row.names =1, header= TRUE )
+```
+
+```{r}
+
+# not necessary to select top20 when working with kingdom data!
+selecttop20par <- rowSums(Bacterialspecies)
+
+Bacterialspecies <- rownames_to_column(Bacterialspecies)
+Bacterialspecies <- as.data.frame(Bacterialspecies %>% top_n(15,selecttop20par)) #15 in case of species level, 10 in case of genus level
+other <- 100-colSums(Bacterialspecies[,-1])
+rownames(Bacterialspecies) <- Bacterialspecies$rowname
+Bacterialspecies <- Bacterialspecies[,-1]
+Bacterialspecies <- rbind(Bacterialspecies,other)
+rownames(Bacterialspecies)[nrow(Bacterialspecies)] <- "Other"
+
+#when working with kingdom data start here
+Bacterialspecies2 <- as.data.frame(t(Bacterialspecies))
+
+
+Bacterialspecies2$Staalnummer<-rownames(t(Bacterialspecies))
+metadata$Staalnummer <- rownames(metadata)
+
+metadata_subset <- metadata
+metadata_subset <- subset(metadata, select = -c(Study:DNAExtraction_method))
+
+Bacterialspecies2 <- inner_join(Bacterialspecies2, metadata_subset, by = c("Staalnummer"))
+
+rownames(Bacterialspecies2)<-Bacterialspecies2$Staalnummer
+
+
+Bacterialspecies3<-Bacterialspecies2
+
+
+OTUtable_av <- ddply(Bacterialspecies2,.(Body_site),numcolwise(mean,na.rm = TRUE))
+    rownames(OTUtable_av) <- OTUtable_av[,1]
+
+OTUtable_av2  <- reshape2::melt(OTUtable_av,id.vars="Body_site")
+OTUtable_av2$value <- as.numeric(OTUtable_av2$value)
+
+
+```
+
+
+
+# to obtain the standard deviation
+```{r}
+OTUtable_sd <- ddply(Bacterialspecies2, .(Body_site), numcolwise(sd, na.rm = TRUE))
+
+
+```
+
+# Save the DataFrame to a CSV file with a semicolon separator
+```{r}
+write.csv2(OTUtable_av, file = "averages_species.csv", row.names = FALSE)
+write.csv2(OTUtable_sd, file = "sd_species.csv", row.names = FALSE)
+```
+
+
+# check for the unclassified fraction if it is significantly different between all four groups
+
+```{r}
+metadata_3_new <- Bacterialspecies2                             # Duplicate data
+metadata_3_new$Body_site <- factor(metadata_3_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+
+rownames(metadata_3_new) <- metadata_3_new$Sample_name
+```
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+```{r}
+a_micr<-ggplot(subset(metadata_3_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = UNCLASSIFIED, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + #scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab("% Unclassified") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))   +theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+```
+```{r}
+ggsave("unclassified_percentage.png", units="in", width=16, height=10, dpi=400, bg="white")
+```
+
+
+# kingdom level
+
+```{r}
+colors_fix_bacteria <- c("k__Bacteria"="#5ab4ac","k__Archaea"="#f5f5f5", "k__Eukaryota"="#d8b365")
+```
+# kingdom level with an unclassified fraction
+```{r}
+colors_fix_bacteria <- c("k__Bacteria"="#5ab4ac","UNCLASSIFIED"="black", "k__Eukaryota"="#d8b365")
+```
+
+# Kingdom level
+```{r}
+
+bacteria_top<-OTUtable_av2[OTUtable_av2$Body_site=="Top_scalp",]
+bacteria_top$value <- round(bacteria_top$value, digits=1)
+
+h2<- ggplot(bacteria_top, aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Top scalp") +theme(legend.text = element_text(size=15), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+
+bacteria_back<-OTUtable_av2[OTUtable_av2$Body_site=="Back_scalp",]
+bacteria_back$value <- round(bacteria_back$value, digits=1)
+
+h1<- ggplot(bacteria_back, aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Back scalp") +theme(legend.text = element_text(size=15), title =element_text(size=20), plot.title = element_text(hjust = 0.5))
+bacteria_les<-OTUtable_av2[OTUtable_av2$Body_site=="Lesional",]
+bacteria_les$value <- round(bacteria_les$value, digits=1)
+
+P1<- ggplot(bacteria_les, aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Lesional") +theme(legend.text = element_text(size=15), title =element_text(size=20), plot.title = element_text(hjust = 0.5))
+
+bacteria_nonles<-OTUtable_av2[OTUtable_av2$Body_site=="Non_Lesional",]
+bacteria_nonles$value <- round(bacteria_nonles$value, digits=1)
+
+P2<- ggplot(bacteria_nonles, aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Non-Lesional") +theme(legend.text = element_text(size=15), title =element_text(size=20), plot.title = element_text(hjust = 0.5))
+
+
+figure <- ggarrange(h2, h1, P2, P1,  
+                    ncol = 4, nrow = 1, legend = "right",common.legend = TRUE)
+```
+
+```{r}
+ggsave("kingdom_piechart_metaphlan4_unclass.png", units="in", width=40, height=10, dpi=400, bg="white")
+```
+
+
+# genus level
+
+```{r}
+colors_fix_bacteria <- c("g__Cutibacterium"="#003c30","g__Corynebacterium"="#01665e", "g__Porphyromonas"="#80cdc1", "g__Acinetobacter" = "#c7eae5",  "g__Staphylococcus"="#f6e8c3","g__GGB2722"= "#FFEC8B", "g__Kocuria" ="#dfc27d","g__Malassezia"="#bf812d","g__Moraxella"="#8c510a","g__Micrococcus" ="#543005" , "Other"="black" )
+```
+
+```{r}
+variable_levels <- c("g__Cutibacterium","g__Corynebacterium", "g__Porphyromonas", "g__Acinetobacter",  "g__Staphylococcus","g__GGB2722", "g__Kocuria","g__Malassezia","g__Moraxella","g__Micrococcus" , "Other")
+```
+
+```{r}
+bacteria_top<-OTUtable_av2[OTUtable_av2$Body_site=="Top_scalp",]
+bacteria_top$value <- round(bacteria_top$value, digits=1)
+
+
+h2 <- bacteria_top %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Top scalp") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+
+bacteria_back<-OTUtable_av2[OTUtable_av2$Body_site=="Back_scalp",]
+bacteria_back$value <- round(bacteria_back$value, digits=1)
+
+h1 <- bacteria_back %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Back scalp") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+
+
+
+bacteria_les<-OTUtable_av2[OTUtable_av2$Body_site=="Lesional",]
+bacteria_les$value <- round(bacteria_les$value, digits=1)
+
+P1<-  bacteria_les %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Lesional") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+bacteria_nonles<-OTUtable_av2[OTUtable_av2$Body_site=="Non_Lesional",]
+bacteria_nonles$value <- round(bacteria_nonles$value, digits=1)
+
+P2<-  bacteria_nonles %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Non-Lesional") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+```
+
+```{r}
+figure <- ggarrange(h2, h1, P2, P1,  
+                    ncol = 4, nrow = 1, legend = "right", common.legend = TRUE)
+```
+
+```{r}
+ggsave("genera_piechart_qstat10_metaphlan4.png", units="in", width=17, height=11, dpi=300, bg="white")
+```
+
+
+#species level
+
+#color code relative abundance species
+```{r}
+colors_fix_bacteria <- c("s__Cutibacterium_acnes"="#003c30","s__Cutibacterium_granulosum"="#01665e", "s__Cutibacterium_namnetense"="#35978f", "s__Corynebacterium_aurimucosum"="#80cdc1","s__Corynebacterium_otitidis"="#c7eae5", "s__Staphylococcus_capitis" = "#B0C4DE", "s__Staphylococcus_saccharolyticus"="#8B8878", "s__Staphylococcus_epidermidis"="#f5f5f5",  "s__Staphylococcus_aureus"="#f6e8c3","s__GGB2722_SGB3663"= "#FFEC8B","s__Moraxella_osloensis"="#FFA54F", "s__Kocuria_rhizophila" ="#dfc27d", "s__Malassezia_globosa"="#bf812d","s__Malassezia_restricta"="#8c510a","s__Micrococcus_luteus" ="#543005", "Other"="black" )
+```
+
+
+#order relative abundance species
+```{r}
+variable_levels <- c("s__Cutibacterium_acnes","s__Cutibacterium_granulosum", "s__Cutibacterium_namnetense", "s__Corynebacterium_aurimucosum","s__Corynebacterium_otitidis", "s__Staphylococcus_capitis" ,"s__Staphylococcus_saccharolyticus", "s__Staphylococcus_epidermidis",  "s__Staphylococcus_aureus","s__GGB2722_SGB3663","s__Moraxella_osloensis","s__Kocuria_rhizophila" , "s__Malassezia_globosa","s__Malassezia_restricta","s__Micrococcus_luteus" , "Other")
+```
+
+```{r}
+bacteria_top<-OTUtable_av2[OTUtable_av2$Body_site=="Top_scalp",]
+bacteria_top$value <- round(bacteria_top$value, digits=1)
+
+
+h2 <- bacteria_top %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Top scalp") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+
+
+bacteria_back<-OTUtable_av2[OTUtable_av2$Body_site=="Back_scalp",]
+bacteria_back$value <- round(bacteria_back$value, digits=1)
+
+
+h1 <- bacteria_back %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Back scalp") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+
+
+bacteria_les<-OTUtable_av2[OTUtable_av2$Body_site=="Lesional",]
+bacteria_les$value <- round(bacteria_les$value, digits=1)
+
+P1<-  bacteria_les %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Lesional") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+bacteria_nonles<-OTUtable_av2[OTUtable_av2$Body_site=="Non_Lesional",]
+bacteria_nonles$value <- round(bacteria_nonles$value, digits=1)
+
+P2<-  bacteria_nonles %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  ggplot(aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0)  + 
+  scale_fill_manual(name='',values=colors_fix_bacteria)+
+  theme_void() + ggtitle("Non-Lesional") +theme(legend.text = element_text(size=15, face="italic"), title =element_text(size=20), plot.title = element_text(hjust = 0.5)) 
+```
+
+```{r}
+figure <- ggarrange(h2, h1, P2, P1,  
+                    ncol = 4, nrow = 1, legend = "right", common.legend = TRUE)
+```
+
+
+
+```{r}
+ggsave("species_piechart_qstat10_metaphlan4.png", units="in", width=17, height=11, dpi=300, bg="white")
+```
+
+#Fig S3. Commpare absolute number of reads between kingdom
+
+
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, sep=",", dec =";",row.names=1, stringsAsFactors=FALSE)
+metadata$Sample <- rownames(metadata)
+```
+
+
+```{r}
+Bacterialspecies <- read.csv2("metaphlan4_merged_kingdom_readstats.csv", sep=",",dec=".", row.names=1, header= TRUE )
+
+Bacterialspeciest <- (as.data.frame(t(Bacterialspecies)))
+Bacterialspeciest$Sample <- rownames(Bacterialspeciest)
+
+```
+
+```{r}
+metadata_2 <- inner_join(Bacterialspeciest,metadata, by="Sample")
+```
+
+```{r}
+metadata_2_new <- metadata_2                             # Duplicate data
+metadata_2_new$Body_site <- factor(metadata_2_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+```
+
+
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+#Bacteria
+```{r}
+p<-ggplot(subset(metadata_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = k__Bacteria, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Bacteria)) + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20)) + theme(legend.position="none") + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+
+```
+#Eukaryota
+```{r}
+d<-ggplot(subset(metadata_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = k__Eukaryota, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Eukaryota)) + xlab("") +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  + theme(legend.position="none") + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+
+```
+
+```{r}
+figure <- ggarrange(p,d,ncol=2, nrow=1, align="hv", labels=c("A","B"), font.label=list(size=17))
+```
+```{r}
+ggsave("Psoriasiscapitis_Log10BacteriaFungi.png", units="in", width=18, height=7, dpi=400, bg="white")
+```
+
+
+#Host reads
+#Fig S2.
+
+```{r}
+hostreads_kneaddata <- read.csv("Hostreads_kneaddata.csv", header=TRUE, dec=",", sep=",", stringsAsFactors=FALSE)
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample_name <- rownames(metadata)
+
+hostreads_2 <- inner_join(hostreads_kneaddata,metadata, by="Sample_name")
+
+hostreads_2$Humann_reads <- hostreads_2$trimmed.pair1 - hostreads_2$decontaminated.hg37dec_v0.1.pair1
+
+hostreads_2_new <- hostreads_2                             # Duplicate data
+hostreads_2_new$Body_site <- factor(hostreads_2_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+
+
+
+```
+
+#Compare means
+```{r}
+input_data_filt <- hostreads_2_new
+
+rownames(input_data_filt) <- input_data_filt$Sample_name
+```
+
+```{r}
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+```
+```{r}
+mean_lesional_micr <- mean(input_data_filt$final.pair1)
+median_lesional_micr <- median(input_data_filt$final.pair1)
+max_lesional_micr <- max(input_data_filt$final.pair1)
+min_lesional_micr <- min(input_data_filt$final.pair1)
+
+
+mean_lesional_Humann_reads <- mean(input_data_filt$Humann_reads)
+median_lesional_Humann_reads <- median(input_data_filt$Humann_reads)
+max_lesional_Humann_reads <- max(input_data_filt$Humann_reads)
+min_lesional_Humann_reads <- min(input_data_filt$Humann_reads)
+```
+```{r}
+input_data_filt <- hostreads_2_new
+
+rownames(input_data_filt) <- input_data_filt$Sample_name
+```
+
+```{r}
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+```
+```{r}
+mean_nonlesional_micr <- mean(input_data_filt$final.pair1)
+median_nonlesional_micr <- median(input_data_filt$final.pair1)
+max_nonlesional_micr <- max(input_data_filt$final.pair1)
+min_nonlesional_micr <- min(input_data_filt$final.pair1)
+
+
+mean_nonlesional_Humann_reads <- mean(input_data_filt$Humann_reads)
+median_nonlesional_Humann_reads <- median(input_data_filt$Humann_reads)
+max_nonlesional_Humann_reads <- max(input_data_filt$Humann_reads)
+min_nonlesional_Humann_reads <- min(input_data_filt$Humann_reads)
+```
+
+```{r}
+input_data_filt <- hostreads_2_new
+
+rownames(input_data_filt) <- input_data_filt$Sample_name
+```
+
+```{r}
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+```
+```{r}
+mean_topscalp_micr <- mean(input_data_filt$final.pair1)
+median_topscalp_micr <- median(input_data_filt$final.pair1)
+max_topscalp_micr <- max(input_data_filt$final.pair1)
+min_topscalp_micr <- min(input_data_filt$final.pair1)
+
+
+mean_topscalp_Humann_reads <- mean(input_data_filt$Humann_reads)
+median_topscalp_Humann_reads <- median(input_data_filt$Humann_reads)
+max_topscalp_Humann_reads <- max(input_data_filt$Humann_reads)
+min_topscalp_Humann_reads <- min(input_data_filt$Humann_reads)
+```
+
+```{r}
+input_data_filt <- hostreads_2_new
+
+rownames(input_data_filt) <- input_data_filt$Sample_name
+```
+
+```{r}
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+```
+```{r}
+mean_backscalp_micr <- mean(input_data_filt$final.pair1)
+median_backscalp_micr <- median(input_data_filt$final.pair1)
+max_backscalp_micr <- max(input_data_filt$final.pair1)
+min_backscalp_micr <- min(input_data_filt$final.pair1)
+
+
+
+mean_backscalp_Humann_reads <- mean(input_data_filt$Humann_reads)
+median_backscalp_Humann_reads <- median(input_data_filt$Humann_reads)
+max_backscalp_Humann_reads <- max(input_data_filt$Humann_reads)
+min_backscalp_Humann_reads <- min(input_data_filt$Humann_reads)
+```
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+
+```{r}
+
+log_decontam<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = final.pair1, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21, size=3) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Decontaminated~Reads)) + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE)+ 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", tip.length=0.01, textsize=8, size=6, bracket.size = 0.3, vjust=0)
+print(log_decontam)
+```
+```{r}
+log_human<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = Humann_reads, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21, size = 3) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Contaminant~hg37~Reads)) + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", tip.length=0.01, textsize=8, size=6, bracket.size = 0.3, vjust=0)
+```
+
+
+```{r}
+log_trimmed<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = trimmed.pair1, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21, size = 3) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Trimmed~Reads)) + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", tip.length=0.01, textsize=8, size=6, bracket.size = 0.3, vjust=0)
+```
+
+```{r}
+percent_nonhuman<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = X.Non.Human, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21, size=3) + 
+  theme(panel.grid = element_blank()) + 
+  ylab("% Non-Human") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH",  tip.length=0.01, textsize=8, size=6, bracket.size = 0.3, vjust=0)
+```
+
+```{r}
+percen_human<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = X.Human, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() + 
+  geom_point(position = position_jitter(width = 0.25), pch=21, size=3) +
+  theme(panel.grid = element_blank()) + 
+  ylab("%reads mapped to human") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", tip.length=0.01, textsize=8, size=6, bracket.size = 0.3, vjust=0)
+```
+
+```{r}
+figureLOG <- ggarrange(log_trimmed, log_human, percen_human, percent_nonhuman,ncol=2, nrow=2, align="hv", labels=c("A","B", "C", "D"), font.label=list(size=17))
+```
+
+#save Fig. S2
+```{r}
+ggsave("Psoriasiscapitis_kneaddata.png", units="in", width=20, height=15, dpi=400, bg="white")
+```
+
+
+# 16S qPCR data-analysis
+# Protocol
+qPCR assays were performed using StepOnePlus real-time PCR system. Reactions were performed in a volume of 20 μl consisting of 10.0 μl of 2x iTaq universal SYBR Green supermix (Bio-Rad Laboratories, Hercules, CA, USA), 2.0 μl DNA template, 0.8 μl (10 µM stock) of each primer, and 6.4 μl nuclease-free water. Amplifications were ran as follows: initial denaturation for 2 min at 95°C, followed by 40 cycles of 15 s denaturation at 95°C and combined anneal/extension 1’ at 60°C
+
+At the end of the qPCR run, a melting curve analysis was performed to confirm product specificity (60-95°C, ΔT per 15 s = 0.3°C). Quantification was performed using a standard curve based on known concentrations of DNA standard dilutions from 107 copies µl-1 down to 10 copies µl-1. All qPCR analyses were conducted in triplicate.
+```{r Loading libraries,cache=TRUE,warning=FALSE,message=FALSE,echo=FALSE}
+library("ggplot2") # plots
+library("dplyr") # manipulate data
+library("tidyr")
+library("knitr")
+library("ggsignif")
+
+# library("RColorBrewer") # colors
+# library("readxl") # read metadata
+```
+
+
+
+```{r}
+### When downloading the qPCR data, best is to remove the first N lines of system data and save the file as CSV.
+### Then upload the .csv to the /data folder on the server.
+
+# Read data
+data.plate1 <- read.csv("16S_plate1.csv",header = TRUE, row.names = 1, sep=",", dec=".")
+data.plate1 <- data.plate1[,1:19]  # select usefull cols
+data.plate2 <- read.csv("16S_plate2.csv",header = TRUE, row.names = 1, sep=";")
+data.plate2 <- data.plate2[,1:19] # select usefull cols
+data.plate3 <- read.csv("16S_plate3.csv",header = TRUE, row.names = 1, sep=";")
+data.plate3 <- data.plate3[,1:19]
+
+data <- rbind(data.plate1, data.plate2, data.plate3) # merge data
+
+
+# Rename Ct columns
+colnames(data)[which(names(data) == "C.")] <- "Ct"
+colnames(data)[which(names(data) == "C..Mean")] <- "Ct.Mean"
+colnames(data)[which(names(data) == "C..SD")] <- "Ct.SD"
+
+# Crop dataset
+data.clean <- data %>% dplyr::select(Sample.Name, Target.Name, Quantity.Mean, Quantity.SD)
+
+
+# Sort by sample ID
+data.clean <- data.clean[order(data.clean$Sample.Name),]
+
+# Convert to numeric
+data.clean$Quantity.Mean <- as.numeric(sub(",", ".", data.clean$Quantity.Mean, fixed = TRUE))
+data.clean$Quantity.SD <- as.numeric(sub(",", ".", data.clean$Quantity.SD, fixed = TRUE))
+
+# Split of the dilution
+data.clean <- data.clean %>%
+  separate(Sample.Name, c("ID", "Dilution"), "-")
+
+# Replace dilution factor with actual dilution
+data.clean$Dilution <- 10
+
+# Remove samples without a value for concentration
+data.clean.samples <- data.clean[complete.cases(data.clean$Quantity.Mean), ]
+
+
+metadata.tibble <- read.csv("16S_metadata.csv",header = TRUE, row.names = 1, sep=",")
+metadata.tibble$ID <- rownames(metadata.tibble)
+
+# Print metadata
+kable(metadata.tibble, caption = "Metadata QSP samples")
+
+
+# Merge metadata
+meta.samples <- merge(data.clean.samples, metadata.tibble, by = "ID")
+
+
+# Sort table
+sort <- as.vector(metadata.tibble$ID)
+meta.samples$ID <- factor(meta.samples$ID, levels = sort)
+```
+```{r}
+p<- ggplot(meta.samples, aes(x=ID, y=Quantity.Mean, group=Sample_type, color=Sample_type)) + 
+  geom_point(alpha = 1)+
+  geom_errorbar(alpha = 0.3, aes(ymin=Quantity.Mean-Quantity.SD, ymax=Quantity.Mean+Quantity.SD), width=.5)
+p <- p + scale_y_continuous(trans='log10')
+p <- p + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="qPCR analysis QSP", subtitle = "qPCR copies as measured in the DNA extract", x="sample ID", y = "Copies/μl")
+p + geom_hline(yintercept=10, linetype="dashed", color = "red") + annotate(geom="text", label="LOD", x=1, y=1, vjust=-6, hjust=0.3, color= "red")
+
+```
+
+```{r}
+# Dilution factor 10
+# correction factor 50 µL extract --> *50
+# 100 cm^2 swabbed --> /100  
+# correction factor = 0.5
+
+correctionfactor <- 0.5
+
+meta.samples$Quantity.Mean.Corr <- meta.samples$Quantity.Mean * (meta.samples$Dilution * correctionfactor)
+meta.samples$Quantity.SD.Corr <- meta.samples$Quantity.SD * (meta.samples$Dilution * correctionfactor)
+
+p<- ggplot(meta.samples, aes(x=ID, y=Quantity.Mean.Corr, group=Sample_type, color=Sample_type)) + 
+  geom_point(alpha = 1)+
+  geom_errorbar(alpha = 0.3, aes(ymin=Quantity.Mean.Corr-Quantity.SD.Corr, ymax=Quantity.Mean.Corr+Quantity.SD.Corr), width=.3)
+p <- p + scale_y_continuous(trans='log10')
+p <- p + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + labs(title="qPCR analysis QSP",subtitle = "qPCR copies recalculated per cm² of swabbed surface", x="sample ID", y = "Copies/cm² scalp")
+p + geom_hline(yintercept=100000, linetype="dashed", color = "red") + annotate(geom="text", label="LOD", x=1, y=10000, vjust=-6, hjust=0.3, color= "red")
+
+
+
+```
+
+
+```{r}
+library(ggplot2)
+
+# Your ggplot code
+qPCR_result <- ggplot(subset(meta.samples, Sample_type %in% c("Lesional", "Non_Lesional")), aes(y = Quantity.Mean.Corr, x = Sample_type, fill = Sample_type)) +  
+  scale_y_continuous(trans = 'log10') +
+  geom_boxplot(outlier.shape = NA) +  
+  theme_bw() +  
+  geom_point(position = position_jitter(width = 0.25), pch = 21, size=3) +
+  theme(panel.grid = element_blank(), axis.text.x = element_text(size = 20), axis.text.y = element_text(size = 14), axis.title = element_text(size = 21)) +   
+  ylab(expression(Log[10] ~ "16S Copies/cm²")) + xlab("") + scale_fill_manual(values = c("#a6611a", "#dfc27d"))  +guides(fill=FALSE)+ 
+  stat_compare_means(label= "p.signif",comparisons = list(c("Lesional", "Non_Lesional")),method="wilcox.test", p.adjust.method="BH", tip.length=0.01, textsize=8,size=6, bracket.size = 0.3, vjust=0)
+
+
+```
+
+```{r}
+
+log_decontam<-ggplot(subset(hostreads_2_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = final.pair1, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21, size=3) + scale_y_continuous(trans='log10')+ 
+  theme(panel.grid = element_blank()) + 
+  ylab(expression(Log[10]~Decontaminated~Reads)) + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE)+ 
+  stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", tip.length=0, textsize=6, bracket.size = 0.3, vjust=0)
+print(log_decontam)
+```
+
+```{r}
+figure_count <- ggarrange(log_decontam, qPCR_result,ncol=2, nrow=1, align="hv", labels=c("A","B"), widths = c(2, 1), font.label=list(size=17))
+```
+
+
+```{r}
+ggsave("Psoriasiscapitis_16S_decontamdata.png", units="in", width=14, height=7, dpi=400, bg="white")
+```
+
+
+# Fig. S6. Alpha-diversity 
+
+
+# non-rarefied data
+```{r}
+uparse_otus<-read.csv2("metaphlan4_merged_species_readstats.csv", sep=",",row.names=1, dec=",", header=TRUE)
+```
+
+
+```{r}
+divdf_metaphlan2 <- data.frame(microbiome::alpha(uparse_otus, index = c("richness_observed")),microbiome::alpha(uparse_otus, index = c("diversity_shannon")), microbiome::alpha(uparse_otus, index = c("diversity_gini_simpson")),microbiome::alpha(uparse_otus, index = c("dominance_gini")))
+divdf_metaphlan2 <- as.data.frame(divdf_metaphlan2)
+
+divdf_metaphlan2$Sample_name <- rownames(divdf_metaphlan2)
+```
+
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample_name <- rownames(metadata)
+```
+
+```{r}
+metadata_divdf <- inner_join(divdf_metaphlan2,metadata, by="Sample_name")
+
+rownames(metadata_divdf) <- metadata_divdf$Sample_name
+```
+
+```{r}
+metadata_divdf_new <- metadata_divdf                            # Duplicate data
+metadata_divdf_new$Body_site <- factor(metadata_divdf$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+```
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+
+```{r}
+a_micr<-ggplot(subset(metadata_divdf_new,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = observed, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + 
+  theme(panel.grid = element_blank()) + 
+  ylab("Richness observed") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+
+
+b_micr<-ggplot(subset(metadata_divdf_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = diversity_shannon, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + 
+  theme(panel.grid = element_blank()) + 
+  ylab("Shannon") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+
+
+c_micr<-ggplot(subset(metadata_divdf_new ,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = diversity_gini_simpson, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + 
+  theme(panel.grid = element_blank()) + 
+  ylab("Simpson") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+
+
+d_micr<-ggplot(subset(metadata_divdf_new,  Body_site %in% c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional")),aes(y = dominance_gini, x = Body_site, fill=Body_site) ) + 
+  geom_boxplot(outlier.shape = NA) + theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) + 
+  theme(panel.grid = element_blank()) + 
+  ylab("Dominance Gini") + xlab("") +  scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))  +  theme(axis.title=element_text(size=21),axis.text.y=element_text(size=14),axis.text.x=element_text(size=20))+guides(fill=FALSE) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=6)
+```
+```{r}
+figure_notrare <- ggarrange(a_micr,b_micr, c_micr, d_micr, ncol=2, nrow=2, align="hv", labels=c("A","B", "C", "D"), font.label=list(size=17))
+```
+```{r}
+ggsave("alphadiverisity_notrarefied_metaphlan4.png", units="in", width=20, height=15, dpi=400, bg="white")
+```
+
+# Fig. S8. Humann3.6 mapped average plots
+
+```{r}
+input_data <-read.csv2("humann36_pathabundance_relab.csv", header = TRUE, sep = ",",  dec = ".", stringsAsFactors = FALSE, row.names=1)
+```
+```{r}
+input_metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+```
+
+
+
+```{r}
+unstrat_pathways <-function(dat_path){
+  temp = dat_path[!grepl("\\|",rownames(dat_path)),]
+  return(temp)
+}
+
+input_data = unstrat_pathways(input_data)
+```
+
+# 610 unstratified pathways 
+```{r}
+colSums(input_data)
+```
+
+```{r}
+colSums(input_data) == 0 
+```
+
+```{r}
+selecttop20par <- rowSums(input_data)
+input_data <- rownames_to_column(input_data)
+input_data <- as.data.frame(input_data %>% top_n(30,selecttop20par)) #100
+other <- 1-colSums(input_data[,-1])
+rownames(input_data) <- input_data$rowname
+input_data <- input_data[,-1]
+input_data <- rbind(input_data,other)
+rownames(input_data)[nrow(input_data)] <- "Other"
+input_data2 <- t(input_data)
+input_data2<-as.data.frame(input_data2)
+
+input_data2$Sample_name<-rownames(t(input_data))
+input_metadata$Sample_name<-rownames(input_metadata)
+
+
+#subset metadata
+
+metadata_subset <- input_metadata
+metadata_subset <- subset(input_metadata, select = -c(Study:DNAExtraction_method))
+
+input_data2 <- inner_join(input_data2,metadata_subset, by = c("Sample_name"))
+
+rownames(input_data2)<-input_data2$Sample_name
+
+
+
+
+OTUtable_av <- ddply(input_data2,.(Body_site),numcolwise(mean,na.rm = TRUE))
+    rownames(OTUtable_av) <- OTUtable_av[,1]
+ #   OTUtable_av <- OTUtable_av[,-c(1)]
+
+OTUtable_av2  <- reshape2::melt(OTUtable_av,id.vars="Body_site")
+OTUtable_av2$value <- as.numeric(OTUtable_av2$value)
+```
+# to obtain the standard deviation
+```{r}
+OTUtable_sd <- ddply(input_data2, .(Body_site), numcolwise(sd, na.rm = TRUE))
+
+
+```
+
+```{r}
+library(ggplot2)
+library(RColorBrewer)
+
+n_colors <- 31
+brbg_palette <- colorRampPalette(brewer.pal(11, "BrBG"))(n_colors)
+
+
+bacteria_top<-OTUtable_av2[OTUtable_av2$Body_site=="Top_scalp",]
+topscalp <- ggplot(bacteria_top, aes(x = "", y = value, fill = variable)) +
+  geom_bar(stat = "identity", width = 1) +
+  scale_fill_manual(values = brbg_palette) +
+  ylab("Relative abundance") +
+  xlab("Top scalp") +
+  theme(
+    legend.text = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 18),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_blank(),
+    axis.line.y = element_blank()
+  )
+
+topscalp
+ggsave("topscalp_RbY.png", units="in", width=20, height=12, dpi=400, bg="white")
+
+bacteria_back<-OTUtable_av2[OTUtable_av2$Body_site=="Back_scalp",]
+backscalp <- ggplot(bacteria_back, aes(x = "", y = value, fill = variable)) +
+  geom_bar(stat = "identity", width = 1) +
+  scale_fill_manual(values = brbg_palette) +
+  ylab("Relative abundance") +
+  xlab("Back scalp") +
+  theme(
+    legend.text = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 18),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_blank(),
+    axis.line.y = element_blank()
+)
+backscalp
+
+bacteria_les<-OTUtable_av2[OTUtable_av2$Body_site=="Lesional",]
+lesionalscalp<- ggplot(bacteria_les, aes(x = "", y = value, fill = variable)) +
+  geom_bar(stat = "identity", width = 1) +
+  scale_fill_manual(values = brbg_palette) +
+  ylab("Relative abundance") +
+  xlab("Lesional") +
+  theme(
+    legend.text = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 18),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_blank(),
+    axis.line.y = element_blank()
+)
+
+bacteria_nonles<-OTUtable_av2[OTUtable_av2$Body_site=="Non_Lesional",]
+nonlesionalscalp<- ggplot(bacteria_nonles, aes(x = "", y = value, fill = variable)) +
+  geom_bar(stat = "identity", width = 1) +
+  scale_fill_manual(values = brbg_palette) +
+  ylab("Relative abundance") +
+  xlab("Non_Lesional") +
+  theme(
+    legend.text = element_text(size = 15),
+    axis.title.x = element_text(size = 15),
+    axis.text.y = element_text(size = 10),
+    title = element_text(size = 18),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_blank(),
+    axis.line.y = element_blank()
+)
+
+figure <- ggarrange(topscalp, backscalp, lesionalscalp, nonlesionalscalp, ncol = 4, nrow = 1,common.legend = TRUE, legend ="bottom",align="hv", labels=c("A","B", "C", "D"), font.label=list(size=17))
+```
+#save Fig. S8.
+```{r}
+ggsave("Psoriasiscapitis_humann3.6averages_UNIQUE_RByn.png", units="in", width=20, height=12, dpi=400, bg="white")
+```
+
+#Fig. 6 and Fig.S9: Humann3.6 mapped
+```{r}
+input_data <-read.csv2("humann36_pathabundance_relab.csv", header = TRUE, sep = ",",  dec = ".", stringsAsFactors = FALSE, row.names=1)
+```
+
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, sep=",", dec =".",row.names=1, stringsAsFactors=FALSE)
+```
+
+
+#unstratify the input data
+```{r}
+unstrat_pathways <-function(dat_path){
+  temp = dat_path[!grepl("\\|",rownames(dat_path)),]
+  return(temp)
+}
+
+input_data = unstrat_pathways(input_data)
+```
+
+```{r}
+# sum values in columns
+colSums(input_data[,-1])
+
+#In the metagenomics table, rows should be sampleID's and columns taxa
+# transpose metagenomics table
+input_data_t = as.data.frame(t(input_data))
+# check all rows sum up to 1
+rowSums(input_data_t)
+```
+```{r}
+input_data_filt <- input_data_t
+```
+
+
+### Maaslin2 pair-wise comparisons
+
+# Lesional vs non-lesional: inflammation marker pathways present? 
+```{r}
+
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysv36qstat10_LesionalvsNon_Lesional", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+# Lesional vs top-scalp: disease marker / health marker pathways present? 
+```{r}
+input_data_filt <- input_data_t
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysv36qstat10_LesionalvsTopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Top_scalp"))
+
+```
+
+
+
+# Lesional vs back-scalp: disease marker / health marker pathways present? 
+```{r}
+input_data_filt <- input_data_t
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysv36qstat10_LesionalvsBackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Back_scalp"))
+
+```
+
+
+# Non_Lesional vs Back-scalp: disease marker / health marker pathways present? 
+```{r}
+input_data_filt <- input_data_t
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysv36qstat10_NonLesionalvsBackscalp_UNIQUE", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Back_scalp"))
+
+```
+
+
+# No differential abundant pathways between Non-lesional scalp areas and the back of the scalp. 
+
+# Non_Lesional vs Top-scalp: disease marker / health marker pathways present? 
+```{r}
+input_data_filt <- input_data_t
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+
+-
+
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysv36qstat10_NonLesionalvsTopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Top_scalp"))
+
+```
+
+#No differential abundant pathways between non-lesional and top scalp areas 
+
+# Top vs back: differential abundant pathways? 
+```{r}
+input_data_filt <- input_data_t
+metadata_filt <- metadata
+metadata_filt$sampleID = row.names(metadata_filt)
+#metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$sampleID)
+
+# select sample ids in metagenomics table
+input_data_filt = input_data_filt[rownames(input_data_filt) %in% keep, ] 
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = input_data_filt, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_pathwaysqstat10_TopscalpvsBackscalp", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Top_scalp"))
+```
+
+```{r setup, include=FALSE}
+library(tidyr)
+library(ComplexHeatmap)
+library(circlize)
+library(tibble)
+```
+
+#Fig. 6 and Fig S9
+#Complex Heatmap 
+```{r}
+data_plot_arranged = data.table::fread("maaslin2_18082023_humannv36.csv", dec=",")
+myplot = data_plot_arranged
+
+```
+
+```{r pressure, echo=FALSE}
+# create matrix for heatmap
+plot_matrix = as.data.frame(cbind(myplot$feature, myplot$value, myplot$Heatmap_value, myplot$Superclass_1, myplot$Superclass_2))
+names(plot_matrix) = c("feature", "value", "Heatmap_value", "Superclass_1", "Superclass_2")
+```
+```{r}
+# transform from long format to wide format
+plot_matrix_wide <- spread(plot_matrix, value, Heatmap_value)
+plot_matrix_wide <- plot_matrix_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+plot_matrix_wide4 <- subset(plot_matrix_wide, select=-c(Superclass_1, Superclass_2))
+plot_matrix_wide2 = apply(as.matrix(plot_matrix_wide4), 2, as.numeric)
+rownames(plot_matrix_wide2) = rownames(plot_matrix_wide)
+```
+
+
+```{r}
+plot_matrix2 = as.data.frame(cbind(myplot$feature,myplot$value, myplot$qval))
+
+names(plot_matrix2) = c("feature","value", "qval")
+plot_matrix2$qval<-as.numeric(plot_matrix2$qval)
+```
+
+```{r}
+# transform from long format to wide format
+matrix_anno_wide <- spread(plot_matrix2, value, qval)
+matrix_anno_wide <- matrix_anno_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+matrix_anno_wide2 = apply(as.matrix(matrix_anno_wide), 2, as.numeric)
+rownames(matrix_anno_wide2) = rownames(matrix_anno_wide)
+```
+
+```{r}
+# extract info from Superclass_1
+#Superclass_1 = as.data.frame(cbind(myplot$feature, myplot$Superclass_1))
+Superclass_1= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, Superclass_2)) #Back scalp or Back_scalp
+Superclass_1_list <- Superclass_1
+
+```
+
+```{r}
+# extract info from Superclass_1
+#Superclass_1 = as.data.frame(cbind(myplot$feature, myplot$Superclass_1))
+Superclass_2= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, Superclass_1)) #Back scalp or Back_scalp
+Superclass_2_list <- Superclass_2
+
+```
+
+
+```{r}
+# bind for annotation: Superclass_1 and Superclass_2"
+anno = as.data.frame(cbind(Superclass_1_list, Superclass_2_list))
+```
+
+
+
+```{r}
+# replace NA by 0 in df for clustering
+plot_matrix_wide3 = plot_matrix_wide2
+plot_matrix_wide3[is.na(plot_matrix_wide3)] <- 0
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows <- complete.cases(plot_matrix_wide2)
+
+# Subset the original dataframe to keep only complete rows
+plot_matrix_wide3 <- plot_matrix_wide2[complete_rows,]
+
+```
+
+```{r}
+matrix_anno_wide3 = matrix_anno_wide2
+matrix_anno_wide3[is.na(matrix_anno_wide3)] <- 1
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows2 <- complete.cases(matrix_anno_wide2)
+
+# Subset the original dataframe to keep only complete rows
+matrix_anno_wide3 <- matrix_anno_wide2[complete_rows,]
+```
+
+```{r}
+
+# Get the row names of both dataframes
+df1_row_names <- rownames(anno)
+
+df2_row_names <- rownames(plot_matrix_wide3)
+# Find the row names that are present in both dataframes
+common_row_names <- intersect(df1_row_names, df2_row_names)
+
+# Subset both dataframes based on the common row names
+plot_matrix_wide3 <- plot_matrix_wide3[common_row_names, ]
+anno <- anno[common_row_names, ]
+```
+
+
+```{r}
+col_fun = colorRamp2(c(-7, 0, 7), c("blue", "#EEEEEE", "red"), space = "RGB")
+
+
+# adjust legend in annotation here > fontface = 2 is bold
+row_ha = rowAnnotation(df = anno, annotation_name_gp= gpar(fontsize = 8, fontface = 2), annotation_name_rot = -60, 
+                       gp = gpar(col ="white", lwd = 2), border = TRUE,
+                       col = list(Superclass_1 = c("Biosynthesis" =  "#662700", "Degradation/Utilization/Assimilation" = "#FFAD65", "Generation of Precursor Metabolites and Energy" ="#A73030","Macromolecule Modification"="#7AA6DC"),  
+                                  Superclass_2 = c("Glycolysis" = "#7AA6DC", "Amino Acid Biosynthesis" = "#A73030", "Aromatic Compound Biosynthesis" = "#3B3B3B",  "Carbohydrate Biosynthesis" = "#003C67", "Aromatic Compound Degradation"="#8FBC8F", "Fermentation" ="#C1FFC1","Cofactor, Carrier, and Vitamin Biosynthesis" = "#B23AEE","Amino Acid Degradation" = "#FFD700", "Secondary Metabolite Degradation" = "darkorange4","Aldehyde Degradation" = "#1C86EE", "Secondary Metabolite Biosynthesis" = "#00CD00", "C1 Compound Utilization and Assimilation"= "#FF7F00", "Carboxylate Degradation" = "#CD661D", "Cell Structure Biosynthesis" = "#CDAA7D", "Electron Transfer Chains" = "#76EEC6", "Fatty Acid and Lipid Biosynthesis" = "#00EEEE", "Tetrapyrrole Biosynthesis"= "#0000CD","Nucleoside and Nucleotide Biosynthesis" = "#8B864E", "Nucleoside and Nucleotide Degradation" = "#EED5D2", "TCA cycle" = "#FF0000", "Carbohydrate Degradation" = "#2E8B57", "Nucleic Acid Processing"= "#FA8072", "Fatty Acid and Lipid Degradation" = "#836FFF", "Amine and Polyamine Degradation" = "#FFFF00", "Alcohol Degradation" ="#68838B", "Cyclitol Degradation" = "grey", "Other Biosynthesis"= "black")),
+                       annotation_legend_param = list(title_gp = gpar(fontsize = 10, fontface = 2), 
+                                                      labels_gp = gpar(fontsize = 10), border='black')) #fontsize =8
+
+```
+
+
+
+```{r}
+# adjust main legend here with heatmap_legend_param
+p = Heatmap(plot_matrix_wide3, name = "-sign(beta)*log(qval)", col = col_fun, na_col = "white", 
+            clustering_distance_rows = "pearson",
+            row_dend_side = "left", row_dend_width = unit(1, "cm"), 
+            show_column_dend = FALSE,
+            row_names_side = "right", 
+            rect_gp = gpar(col = "white", lwd = 2),
+            border_gp = gpar(col = "black", lty = 1),
+            row_names_gp = gpar(fontsize = 8, fontface = "italic"),# fontsize 8
+            column_names_gp = gpar(fontsize = 8), column_names_rot = -60, #rownames size  # fontsize 8
+            left_annotation = row_ha, # this includes the annotation of the graph!
+            width = ncol(plot_matrix_wide3)*unit(8, "mm"), # adjust cell size in heatmap #adjust width unit(8)
+            height = nrow(plot_matrix_wide3)*unit(4, "mm"), # adjust cell size in heatmap
+            row_title = "Pathways (N=25)",
+            row_title_gp = gpar(fontsize = 8, fontface = 2),
+            row_title_side = "left",
+            heatmap_legend_param = list(title_gp = gpar(fontsize = 8,fontface = 2), labels_gp = gpar(fontsize = 8), at = c(-7, -3.5, 0, 3.5, 7),legend_direction = "horizontal", border='black'), #, # fontsize 8
+            #column_order = colnames(plot_matrix_wide2)#,
+            cell_fun = function(j, i, x, y, w, h, fill) {
+              if(matrix_anno_wide3[i, j] < 0.001) {
+                grid.text('***', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.01){
+                grid.text('**', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.05) {
+                grid.text('*', x, y-h*0.01, gp = gpar(fontsize = 6))
+              }}
+)
+p = draw(p, heatmap_legend_side="left", annotation_legend_side="left") 
+p 
+
+
+
+```
+#save Fig. 6 or Fig. S9
+```{r}
+tiff("Figure6.tiff", units='mm', width=340, height=140, res=350, compression="lzw")
+p
+dev.off()
+```
+
+
+
+# Virulence factor genes
+
+# Fig. S10
+```{r cars}
+VF_classes <- read.csv("virulence_factors_classes_relative.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE)
+rownames(VF_classes) <- VF_classes$VFcategory
+VF_classes2 <- VF_classes[,-1]
+```
+
+```{r}
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample <- rownames(metadata)
+
+```
+
+
+```{r}
+VF_classes3 <- t(VF_classes2)
+VF_classes3<-as.data.frame(VF_classes3)
+
+VF_classes3$Sample_name<-rownames(VF_classes3)
+
+
+VF_classes3 <- inner_join(VF_classes3,metadata, by = c("Sample_name"))
+
+rownames(VF_classes3)<-VF_classes3$Sample_name
+
+
+VF_classes3 <- melt(VF_classes3,id.vars=colnames(metadata))
+
+
+
+VF_classes3$value <- as.numeric(VF_classes3$value)
+```
+```{r}
+colors_fix_bacteria <- c("Antimicrobial activity/Competitive advantage" = "#a50026", "Exoenzyme" = "#d73027","Immune modulation" = "#f46d43", "Stress survival" = "#fdae61","Adherence" = "#fee090", "Regulation" = "#ffffbf", "Biofilm" = "#f7f7f7", "Exotoxin" = "#e0f3f8", "Effector delivery system" = "#abd9e9", "Invasion" = "#74add1", "Nutritional/Metabolic factor" = "#4575b4", "Motility" = "#313695" ,"Post-translational modification"= "#CDC5BF","Others" =  "#000000")
+```
+
+
+
+```{r}
+VFclasses_h<-VF_classes3[VF_classes3$Pool=="Healthy",]
+
+```
+```{r}
+
+variable_levels <- c("Antimicrobial activity/Competitive advantage" , "Exoenzyme","Immune modulation", "Stress survival","Adherence", "Regulation", "Biofilm", "Exotoxin", "Effector delivery system", "Invasion", "Nutritional/Metabolic factor", "Motility" ,"Post-translational modification", "Others")
+```
+
+```{r}
+healthy_rel<- VFclasses_h %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above #TAKE CARE!!!! 
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Pool) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'))
+```
+
+```{r}
+ggsave("VFgenes_classes_healthysorted.png", units="in", width=22, height=11, dpi=400, bg="white")
+```
+
+
+```{r}
+VFclasses_les<-VF_classes3[VF_classes3$Body_site_2=="Lesional",]
+```
+
+```{r}
+
+variable_levels <- c("Antimicrobial activity/Competitive advantage" , "Exoenzyme","Immune modulation", "Stress survival","Adherence", "Regulation", "Biofilm", "Exotoxin", "Effector delivery system", "Invasion", "Nutritional/Metabolic factor", "Motility" ,"Post-translational modification", "Others")
+```
+```{r}
+lesional_rel<- VFclasses_les %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'))
+```
+
+```{r}
+ggsave("VFgenes_classes_lesionalsorted.png", units="in", width=11, height=11, dpi=400, bg="white")
+```
+
+
+```{r}
+VFclasses_nonles<-VF_classes3[VF_classes3$Body_site_2=="Non_Lesional",]
+```
+
+```{r}
+
+variable_levels <- c("Antimicrobial activity/Competitive advantage" , "Exoenzyme","Immune modulation", "Stress survival","Adherence", "Regulation", "Biofilm", "Exotoxin", "Effector delivery system", "Invasion", "Nutritional/Metabolic factor", "Motility" ,"Post-translational modification", "Others")
+```
+
+```{r}
+nonlesional_rel <- VFclasses_nonles %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'))
+```
+
+```{r}
+ggsave("VFgenes_classes_nonlesionalsorted.png", units="in", width=11, height=11, dpi=400, bg="white")
+```
+
+
+```{r}
+# Add labels to each plot
+plot_H_labeled <- healthy_rel + labs(tag = "A") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_L_labeled <- lesional_rel + labs(tag = "B") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_NL_labeled <- nonlesional_rel + labs(tag = "C") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_empty <-ggplot()
+```
+
+
+```{r}
+library(cowplot)
+library(grid)
+
+# Combine the legend of the three plots
+combined_legend <- cowplot::get_legend(plot_H_labeled)  # Assuming plot_H_labeled has the legend
+
+# Remove the legends from individual plots
+plot_H_labeled <- plot_H_labeled + theme(legend.position = "none")
+plot_L_labeled <- plot_L_labeled + theme(legend.position = "none")
+plot_NL_labeled <- plot_NL_labeled + theme(legend.position = "none")
+```
+
+
+```{r}
+
+
+
+# Create the grid with the aligned plots and the combined legend
+grid <- plot_grid(plot_H_labeled,
+                  plot_grid(plot_L_labeled, plot_NL_labeled, ncol = 2),
+                  #combined_legend, #,align = "hv",
+                  ncol = 1,
+                  rel_heights = c(1, 1, 0.2))
+```
+Fig. S10
+```{r}
+# Save the figure with adjusted dimensions and legend settings
+ggsave("figure_VF_healthy_lesional_nonlesional_relativeabundance.png",
+       plot = grid,
+       units = "in",
+       width = 10,  # Adjust the width as needed
+       height = 13,  # Adjust the height as needed
+       dpi = 300,
+       bg = "white",
+       scale = 1.5)  # Increase the scale factor to improve legend readability
+
+```
+
+#Maaslin2
+```{r}
+VF_classes <- read.csv("virulence_factors_relative_overview.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE, row.names=1)
+#rownames(VF_classes) <- VF_classes$VFcategory
+VF_classes2 <- VF_classes
+```
+
+```{r}
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+rownames(metadata) <- metadata$Sample_name
+
+```
+
+
+```{r}
+# sum values in columns
+colSums(VF_classes2)
+
+# transpose metagenomics table
+VF_classes2t = as.data.frame(t(VF_classes2))
+
+# check all rows sum up to 1
+rowSums(VF_classes2t)
+```
+
+#Non-Lesional vs Top-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ]
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_NonLesionalvstopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#Non-Lesional vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_NonLesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#Lesional vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_Lesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+#Lesional vs Top-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+
+```
+
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_LesionalvsTopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+
+#Lesional vs Non-Lesional
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_LesionalvsNon_Lesional", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Non_Lesional"))
+```
+#Top-scalp vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_VF_topscalpcsbackscalp", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Top_scalp"))
+```
+
+# Fig. 7: Complex Heatmap Virulence factor genes
+#STEP1: 
+
+```{r}
+VF_list <- read.csv("virulence_classes.csv", header=TRUE,  sep=",", stringsAsFactors=FALSE, row.names=1)
+
+VF_list$feature <- row.names(VF_list)
+
+VF_list$feature2 <- paste(VF_list$feature, VF_list$VF_Name, sep = " - ")
+
+data_plot_arranged = data.table::fread("VF_significantvalues_Maaslin2.csv", dec=",")
+
+myplot = data_plot_arranged
+
+```
+
+#STEP2:
+```{r}
+VF_data <- inner_join(myplot, VF_list, by = c("feature"))
+VF_data <- VF_data[,-c(12:14)]
+VF_data <- VF_data[,-c(13:17)]
+```
+
+```{r pressure, echo=FALSE}
+# create matrix for heatmap
+plot_matrix = as.data.frame(cbind(VF_data$feature2, VF_data$value, VF_data$heatmap_value, VF_data$VF_Name, VF_data$VFcategory))
+names(plot_matrix) = c("feature", "value", "Heatmap_value", "VF_Name", "VF_category")
+```
+
+```{r}
+# transform from long format to wide format
+plot_matrix_wide <- spread(plot_matrix, value, Heatmap_value)
+plot_matrix_wide <- plot_matrix_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+plot_matrix_wide4 <- subset(plot_matrix_wide, select=-c(VF_Name, VF_category))
+plot_matrix_wide2 = apply(as.matrix(plot_matrix_wide4), 2, as.numeric)
+rownames(plot_matrix_wide2) = rownames(plot_matrix_wide)
+```
+
+```{r}
+plot_matrix2 = as.data.frame(cbind(VF_data$feature2,VF_data$value, VF_data$qval))
+names(plot_matrix2) = c("feature","value", "qval")
+```
+
+```{r}
+# transform from long format to wide format
+matrix_anno_wide <- spread(plot_matrix2, value, qval)
+matrix_anno_wide <- matrix_anno_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+matrix_anno_wide2 = apply(as.matrix(matrix_anno_wide), 2, as.numeric)
+rownames(matrix_anno_wide2) = rownames(matrix_anno_wide)
+
+
+```
+
+
+
+```{r}
+#comparison of only three pairwise comparisons
+VF_category= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, VF_Name))
+Superclass_1_list <- VF_category
+```
+
+```{r}
+#comparison of only three pairwise comparisons
+VF_name= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, VF_Name))
+Superclass_1_list <- VF_name
+```
+
+```{r}
+# bind for annotation: Superclass_1 and Superclass_2"
+anno = as.data.frame(Superclass_1_list)
+anno$VF_name = rownames(anno)
+```
+
+
+
+```{r}
+# replace NA by 0 in df for clustering
+plot_matrix_wide3 = plot_matrix_wide2
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows <- complete.cases(plot_matrix_wide2)
+
+# Subset the original dataframe to keep only complete rows
+plot_matrix_wide3 <- plot_matrix_wide2[complete_rows,]
+
+```
+
+
+
+```{r}
+
+plot_matrix_wide3[is.na(plot_matrix_wide3)] <- 0
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows2 <- complete.cases(matrix_anno_wide2)
+
+# Subset the original dataframe to keep only complete rows
+matrix_anno_wide3 <- matrix_anno_wide2[complete_rows,]
+```
+```{r}
+matrix_anno_wide3 = matrix_anno_wide2
+matrix_anno_wide3[is.na(matrix_anno_wide3)] <- 1
+```
+
+```{r}
+
+# Get the row names of both dataframes
+df1_row_names <- rownames(anno)
+
+df2_row_names <- rownames(plot_matrix_wide3)
+# Find the row names that are present in both dataframes
+common_row_names <- intersect(df1_row_names, df2_row_names)
+
+# Subset both dataframes based on the common row names
+plot_matrix_wide3 <- plot_matrix_wide3[common_row_names, ]
+anno <- anno[common_row_names, ]
+anno2 <- anno 
+
+anno2 <- subset(anno, select = c("VF_category"))
+
+anno <- anno2
+
+#anno2 <- as.data.frame(anno2[ , c("VF_category")])
+#row.names(anno2) <- row.names(anno)
+#col.names(anno2) <- col.names(anno$VF_category)
+
+anno$VF_category <- factor(anno$VF_category, levels = c("Antimicrobial activity/Competitive advantage" , "Exoenzyme","Immune modulation", "Stress survival","Adherence", "Regulation", "Biofilm", "Exotoxin", "Effector delivery system", "Invasion", "Nutritional/Metabolic factor", "Motility" ,"Post-translational modification", "Others"))
+
+
+```
+
+```{r}
+col_fun = colorRamp2(c(-10, 0, 10), c("blue", "#EEEEEE", "red"), space = "RGB")
+
+
+# adjust legend in annotation here > fontface = 2 is bold
+row_ha = rowAnnotation(df = anno, annotation_name_gp= gpar(fontsize = 8, fontface = 2), annotation_name_rot = -60, 
+                       gp = gpar(col ="white", lwd = 2), border = TRUE,
+                       col = list(VF_category = c("Antimicrobial activity/Competitive advantage" = "#a50026", "Exoenzyme" = "#d73027","Immune modulation" = "#f46d43", "Stress survival" = "#fdae61","Adherence" = "#fee090", "Regulation" = "#ffffbf", "Biofilm" = "#f7f7f7", "Exotoxin" = "#e0f3f8", "Effector delivery system" = "#abd9e9", "Invasion" = "#74add1", "Nutritional/Metabolic factor" = "#4575b4", "Motility" = "#313695" ,"Post-translational modification"= "#CDC5BF","Others" =  "#000000")),
+                       annotation_legend_param = list(title_gp = gpar(fontsize = 8, fontface = 2), 
+                                                      labels_gp = gpar(fontsize = 8), border='black'))
+
+
+```
+
+```{r}
+# adjust main legend here with heatmap_legend_param
+p = Heatmap(plot_matrix_wide3, name = "-sign(beta)*log(qval)", col = col_fun, na_col = "white", 
+            clustering_distance_rows = "pearson",
+            row_dend_side = "left", row_dend_width = unit(1, "cm"), 
+            show_column_dend = FALSE,
+            row_names_side = "right", 
+            rect_gp = gpar(col = "white", lwd = 2),
+            border_gp = gpar(col = "black", lty = 1),
+            row_names_gp = gpar(fontsize = 8, fontface = "italic"),# fontsize 8
+            column_names_gp = gpar(fontsize = 8), column_names_rot = -60, #rownames size  # fontsize 8
+            left_annotation = row_ha, # this includes the annotation of the graph!
+            width = ncol(plot_matrix_wide3)*unit(8, "mm"), # adjust cell size in heatmap #adjust width unit(8)
+            height = nrow(plot_matrix_wide3)*unit(4, "mm"), # adjust cell size in heatmap
+            row_title = "Virulence factor genes (N=41)",
+            row_title_gp = gpar(fontsize = 8, fontface = 2),
+            row_title_side = "left",
+            heatmap_legend_param = list(title_gp = gpar(fontsize = 8,fontface = 2), labels_gp = gpar(fontsize = 8), at = c(-10, -5, 0, 5, 10),legend_direction = "horizontal", border='black'), #, # fontsize 8
+            #column_order = colnames(plot_matrix_wide2)#,
+            cell_fun = function(j, i, x, y, w, h, fill) {
+              if(matrix_anno_wide3[i, j] < 0.001) {
+                grid.text('***', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.01){
+                grid.text('**', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.05) {
+                grid.text('*', x, y-h*0.01, gp = gpar(fontsize = 6))
+              }}
+)
+p = draw(p, heatmap_legend_side="left", annotation_legend_side="left") 
+p 
+
+```
+
+#save Fig. 7 
+```{r}
+tiff("Figure7.tiff", units='mm', width=180, height=200, res=350, compression= "lzw")
+p
+dev.off()
+```
+
+
+#AMR elements
+```{r cars}
+VF_classes <- read.csv("AMR_elements_relative_overview.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE, row.names =1)
+
+
+colSums(VF_classes)
+
+VF_classes2 <- VF_classes
+```
+
+
+```{r}
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample <- rownames(metadata)
+
+```
+
+
+#Fig. S12
+```{r}
+selecttop20par <- rowSums(VF_classes2)
+
+VF_classes2 <- rownames_to_column(VF_classes2)
+VF_classes2 <- as.data.frame(VF_classes2 %>% top_n(10,selecttop20par))
+other <- 1-colSums(VF_classes2[,-1])
+rownames(VF_classes2) <- VF_classes2$rowname
+VF_classes2 <- VF_classes2[,-1]
+VF_classes2 <- rbind(VF_classes2,other)
+rownames(VF_classes2)[nrow(VF_classes2)] <- "Other"
+VF_classes2 <- as.data.frame(t(VF_classes2))
+```
+
+
+```{r}
+#optional
+names(VF_classes2)[1] <- "MFS antibiotic efflux pump (Phosponic acid)"
+names(VF_classes2)[2] <- "ABC antibiotic efflux pump (MDR)"
+names(VF_classes2)[3] <- "rpoB (Rifamycin)"
+names(VF_classes2)[4] <- "RND antibiotic efflux pump (MDR)"
+names(VF_classes2)[5] <- "ileS (Mupirocin)"
+names(VF_classes2)[6] <- "vga-type ABC-F protein (Lincosamide/Streptogramin)"
+names(VF_classes2)[7] <- "Tet(O) (Tetracycline)"
+names(VF_classes2)[8] <- "ABC-F subfamily (Macrolide)"
+names(VF_classes2)[9] <- "vanR (Glycopeptide)"
+names(VF_classes2)[10] <- "Van ligase (Glycopeptide)"
+```
+
+
+```{r}
+VF_classes2$Sample_name<-rownames(VF_classes2)
+
+
+VF_classes2 <- inner_join(VF_classes2,metadata, by = c("Sample_name"))
+rownames(VF_classes2)<-VF_classes2$Sample
+
+
+VF_classes3 <- melt(VF_classes2,id.vars=colnames(metadata))
+
+#Warning in melt(Bacterialspecies2, id.vars = colnames(metadata)) :
+#The melt generic in data.table has been passed a data.frame and will attempt to redirect to the relevant reshape2 method; please note that reshape2 is deprecated, and this redirection is now deprecated as well. To continue using melt methods from reshape2 while both libraries are attached, e.g. melt.list, you can prepend the namespace like reshape2::melt(Bacterialspecies2). In the next version, this warning will become an error.
+
+VF_classes3$value <- as.numeric(VF_classes3$value)
+
+
+
+
+```
+
+
+```{r}
+VFclasses_h<-VF_classes3[VF_classes3$Body_site_2=="Healthy",]
+```
+
+
+
+```{r}
+colors_fix_bacteria <- c("MFS antibiotic efflux pump (Phosponic acid)" = "#7f3b08", "ABC antibiotic efflux pump (MDR)" = "#b35806","rpoB (Rifamycin)"  = "#e08214", "RND antibiotic efflux pump (MDR)"  = "#fdb863","ileS (Mupirocin)" = "#fee0b6", "vga-type ABC-F protein (Lincosamide/Streptogramin)"   =  "#f7f7f7", "Tet(O) (Tetracycline)"  = "#d8daeb", "ABC-F subfamily (Macrolide)" = "#b2abd2",  "vanR (Glycopeptide)" = "#8073ac", "Van ligase (Glycopeptide)" = "#542788","Other"  = "#2d004b")
+```
+
+```{r}
+#variable levels for new color code! 
+variable_levels <-  c("MFS antibiotic efflux pump (Phosponic acid)", "ABC antibiotic efflux pump (MDR)","rpoB (Rifamycin)", "RND antibiotic efflux pump (MDR)","ileS (Mupirocin)", "vga-type ABC-F protein (Lincosamide/Streptogramin)", "Tet(O) (Tetracycline)", "ABC-F subfamily (Macrolide)",  "vanR (Glycopeptide)" , "Van ligase (Glycopeptide)","Other")
+```
+
+
+```{r}
+healthy_rel <- VFclasses_h %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18))
+```
+```{r}
+ggsave("AMRelements_classes_relativehealthy.png", units="in", width=22, height=11, dpi=400, bg="white")
+```
+
+
+```{r}
+VFclasses_nonles<-VF_classes3[VF_classes3$Body_site_2=="Non_Lesional",]
+```
+
+
+```{r}
+nonlesional_rel<-VFclasses_nonles %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'))
+```
+
+```{r}
+ggsave("AMRelements_classes_relativenonlesional.png", units="in", width=11, height=11, dpi=400, bg="white")
+```
+
+
+```{r}
+VFclasses_les<-VF_classes3[VF_classes3$Body_site_2=="Lesional",]
+```
+
+```{r}
+lesional_rel <- VFclasses_les %>% 
+  dplyr::mutate(
+    across(c(Sample, variable),
+           ~ forcats::as_factor(.)
+           )) %>% 
+  dplyr::mutate(
+    across(variable, ~ forcats::fct_relevel(., variable_levels))
+    ) %>% 
+  dplyr::mutate(
+    across(Sample, ~ forcats::fct_relevel(., variable_levels)) # or provide a vector of levels and use fct_relevel as above
+    ) %>% 
+  ggplot(aes(Sample, y =value, fill = variable)) + 
+  geom_col() + facet_grid(.~Body_site_2) + theme(axis.text.x = element_text(angle =0), axis.ticks.x = element_line(colour = "black"), axis.ticks.y =element_line(colour = "black"), panel.background = element_rect(fill = "white"), legend.position = "bottom", panel.grid.major=element_blank(),  panel.grid.minor=element_blank(), axis.line.x  = element_line(colour = "black"), axis.line.y  = element_line(colour = "black"),)+  theme(axis.text.x = element_text(size=12, angle=90),axis.text.y = element_text(size=14), strip.text.x = element_text(size =16, face="bold"), axis.title.y = element_text(size=18),axis.title.x = element_text(size=18)) +xlab("Participant")+scale_fill_manual(name='',values=colors_fix_bacteria) + ylab("Relative abundance") + theme(legend.text=element_text(size=18,face='italic'))
+```
+
+```{r}
+ggsave("AMRelements_classes_relativelesional.png", units="in", width=11, height=11, dpi=400, bg="white")
+```
+
+
+
+```{r}
+# Add labels to each plot
+plot_H_labeled <- healthy_rel + labs(tag = "A") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_L_labeled <- lesional_rel + labs(tag = "B") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_NL_labeled <- nonlesional_rel + labs(tag = "C") +
+  theme(plot.tag = element_text(size = 20, face = "bold"))
+plot_empty <-ggplot()
+```
+
+
+```{r}
+library(cowplot)
+library(grid)
+
+# Combine the legend of the three plots
+combined_legend <- cowplot::get_legend(plot_H_labeled)  # Assuming plot_H_labeled has the legend
+
+# Remove the legends from individual plots
+plot_H_labeled <- plot_H_labeled + theme(legend.position = "none")
+plot_L_labeled <- plot_L_labeled + theme(legend.position = "none")
+plot_NL_labeled <- plot_NL_labeled + theme(legend.position = "none")
+```
+
+
+```{r}
+
+
+
+# Create the grid with the aligned plots and the combined legend
+grid <- plot_grid(plot_H_labeled,
+                  plot_grid(plot_L_labeled, plot_NL_labeled, ncol = 2),
+                  #combined_legend, #,align = "hv",
+                  ncol = 1,
+                  rel_heights = c(1, 1, 0.2))
+```
+
+```{r}
+# Save the figure with adjusted dimensions and legend settings
+ggsave("figure_healthy_lesional_nonlesional_relativeabundance_AMR_labeled.png",
+       plot = grid,
+       units = "in",
+       width = 10,  # Adjust the width as needed
+       height = 13,  # Adjust the height as needed
+       dpi = 300,
+       bg = "white",
+       scale = 1.5)  # Increase the scale factor to improve legend readability
+
+```
+
+# Fig. S13: AMR-elements
+```{r}
+VF_classes <- read.csv("AMR_elements_relative_overview.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE, row.names =1)
+
+VF_classes2 <- VF_classes
+```
+
+```{r}
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+rownames(metadata) <- metadata$Sample_name
+```
+
+
+
+```{r}
+# sum values in columns
+colSums(VF_classes2)
+
+# transpose metagenomics table
+VF_classes2t = as.data.frame(t(VF_classes2))
+
+# check all rows sum up to 1
+rowSums(VF_classes2t)
+```
+
+#Non-Lesional vs Top-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_NonLesionalvstopscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#Non-Lesional vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Non_Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_NonLesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#Lesional vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_Lesionalvsbackscalp", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+
+#Lesional vs Top-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Top_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_LesionalvsTopscalp_UNIQUE", 
+    fixed_effects = c("Body_site"),
+    reference = c("Body_site,Lesional"))
+```
+
+
+#Lesional vs Non-Lesional
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Lesional' | metadata_filt$Body_site=='Non_Lesional'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ]
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_LesionalvsNon_Lesional_UNIQUE", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Non_Lesional"))
+```
+
+
+#Top-scalp vs Back-scalp
+```{r}
+### NO FILTER TAXA BY PREVALENCE & ABUNDANCE (DATA PRE-PROCESSING)
+VF_classes2_input_filt = VF_classes2t
+```
+
+
+```{r}
+##### SELECTING SAMPLE GROUPS
+# select sample ids in metadata
+set.seed(123)
+metadata_filt = metadata
+metadata_filt$sampleID = row.names(metadata)
+metadata_filt = metadata_filt[(metadata_filt$Body_site=='Top_scalp' | metadata_filt$Body_site=='Back_scalp'), ]
+table(metadata_filt$Body_site)
+table(metadata_filt$subjectID)
+keep = as.vector(metadata_filt$Sample_name)
+
+
+# select sample ids in metagenomics table
+VF_classes2_input_filt2 = VF_classes2_input_filt[rownames(VF_classes2_input_filt) %in% keep, ] 
+
+# Get the order of the samples in metadata_filt
+order <- match(metadata_filt$Sample_name, rownames(VF_classes2_input_filt2))
+
+# Use the order to reorder VF_classes2_input_filt2
+VF_classes2_input_filt2_ordered <- VF_classes2_input_filt2[order, ]
+
+
+```
+
+
+```{r}
+fit_data = Maaslin2(
+    input_data = VF_classes2_input_filt2, 
+    input_metadata = metadata_filt, 
+    min_abundance = 0.0001,
+    min_prevalence = 0.1,
+    max_significance = 0.05,
+    normalization = "NONE",
+    output = "output_AMR_topscalpcsbackscalp", 
+    fixed_effects = c("Body_site"),
+    random_effects = c("subjectID"),
+    reference = c("Body_site,Top_scalp"))
+```
+
+
+# Fig S13: Complex Heatmap AMR genes
+##STEP1
+```{r}
+VF_list <- read.csv("AMR_classes.csv", header=TRUE,  sep=",", stringsAsFactors=FALSE, row.names = 1)
+
+
+VF_list$feature <- row.names(VF_list)
+VF_list$feature <- gsub(";", " ", VF_list$feature)
+
+data_plot_arranged = data.table::fread("significantvalues_AMR_UNIQUE.csv", dec=",")
+#data_plot_arranged$feature <- gsub("..ABC..", " (ABC) ", data_plot_arranged$feature)
+
+myplot = data_plot_arranged
+
+
+```
+
+```{r}
+VF_data <- inner_join(myplot, VF_list, by = c("feature"))
+
+names(VF_data)[11] <- "Drug_Class"
+
+names(VF_data)[12] <- "Resistance_Mechanism"
+#VF_data <- VF_data[,-c(12:14)]
+#VF_data <- VF_data[,-c(13:17)]
+```
+
+```{r pressure, echo=FALSE}
+# create matrix for heatmap
+plot_matrix = as.data.frame(cbind(VF_data$feature, VF_data$value, VF_data$heatmap_value, VF_data$Drug_Class, VF_data$Resistance_Mechanism))
+names(plot_matrix) = c("feature", "value", "Heatmap_value", "Drug_Class", "Resistance_Mechanism")
+
+
+```
+
+```{r}
+# transform from long format to wide format
+plot_matrix_wide <- spread(plot_matrix, value, Heatmap_value)
+plot_matrix_wide <- plot_matrix_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+plot_matrix_wide4 <- subset(plot_matrix_wide, select=-c(Drug_Class, Resistance_Mechanism))
+plot_matrix_wide2 = apply(as.matrix(plot_matrix_wide4), 2, as.numeric)
+rownames(plot_matrix_wide2) = rownames(plot_matrix_wide)
+```
+
+```{r}
+plot_matrix2 = as.data.frame(cbind(VF_data$feature,VF_data$value, VF_data$qval))
+names(plot_matrix2) = c("feature","value", "qval")
+```
+
+```{r}
+# transform from long format to wide format
+matrix_anno_wide <- spread(plot_matrix2, value, qval)
+matrix_anno_wide <- matrix_anno_wide %>% remove_rownames %>% column_to_rownames(var="feature")
+matrix_anno_wide2 = apply(as.matrix(matrix_anno_wide), 2, as.numeric)
+rownames(matrix_anno_wide2) = rownames(matrix_anno_wide)
+
+
+```
+
+```{r}
+# comparison of all pairwise comparisons
+# extract info from Superclass_1
+
+Drug_class= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, `Non_Lesional vs Back_scalp`, `Non_Lesional vs Top_scalp`, Resistance_Mechanism, `Non_Lesional vs Top_scalp`))
+Superclass_1_list <- Drug_class
+
+```
+
+
+```{r}
+# extract info from Superclass_1
+#Superclass_1 = as.data.frame(cbind(myplot$feature, myplot$Superclass_1))
+Resistance_Mechanism= subset(plot_matrix_wide, select=-c(
+`Lesional vs Back_scalp`,`Lesional vs Non_Lesional`, `Lesional vs Top_scalp`, `Non_Lesional vs Back_scalp`, `Non_Lesional vs Top_scalp`, Drug_Class, `Non_Lesional vs Top_scalp`))
+Superclass_2_list <- Resistance_Mechanism
+
+```
+
+```{r}
+# bind for annotation: Superclass_1 and Superclass_2"
+anno = as.data.frame(Superclass_2_list)
+#anno$AMR_name = rownames(anno)
+```
+
+
+
+```{r}
+# replace NA by 0 in df for clustering
+plot_matrix_wide3 = plot_matrix_wide2
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows <- complete.cases(plot_matrix_wide2)
+
+# Subset the original dataframe to keep only complete rows
+plot_matrix_wide3 <- plot_matrix_wide2[complete_rows,]
+
+```
+
+
+
+```{r}
+
+plot_matrix_wide3[is.na(plot_matrix_wide3)] <- 0
+```
+
+#Alternatively drop those columns that have an NA to only visualize those pathways that are differentially abundant in all three groups
+```{r}
+
+# Use complete.cases() to get a logical vector of complete rows
+complete_rows2 <- complete.cases(matrix_anno_wide2)
+
+# Subset the original dataframe to keep only complete rows
+matrix_anno_wide3 <- matrix_anno_wide2[complete_rows,]
+```
+```{r}
+matrix_anno_wide3 = matrix_anno_wide2
+matrix_anno_wide3[is.na(matrix_anno_wide3)] <- 1
+```
+
+```{r}
+
+
+anno$Resistance_Mechanism <- factor(anno$Resistance_Mechanism, levels = c("antibiotic inactivation", "antibiotic target alteration","antibiotic efflux", "reduced permeability to antibiotic","antibiotic target protection", "antibiotic target alteration;antibiotic target replacement", "antibiotic target replacement"))
+
+
+```
+
+```{r}
+col_fun = colorRamp2(c(-10, 0, 10), c("blue", "#EEEEEE", "red"), space = "RGB")
+
+
+# adjust legend in annotation here > fontface = 2 is bold
+row_ha = rowAnnotation(df = anno, annotation_name_gp= gpar(fontsize = 8, fontface = 2), annotation_name_rot = -60, 
+                       gp = gpar(col ="white", lwd = 2), border = TRUE,
+                       col = list(Resistance_Mechanism= c("antibiotic inactivation" = "#b35806", "antibiotic target alteration" = "#f1a340","antibiotic efflux" = "#fee0b6", "reduced permeability to antibiotic" = "#f7f7f7","antibiotic target protection" = "#d8daeb", "antibiotic target alteration;antibiotic target replacement" = "#998ec3", "antibiotic target replacement" = "#542788")),
+                       annotation_legend_param = list(title_gp = gpar(fontsize = 8, fontface = 2), 
+                                                      labels_gp = gpar(fontsize = 8), border='black'))
+
+
+```
+
+```{r}
+# adjust main legend here with heatmap_legend_param
+p = Heatmap(plot_matrix_wide3, name = "-sign(beta)*log(qval)", col = col_fun, na_col = "white", 
+            clustering_distance_rows = "pearson",
+            row_dend_side = "left", row_dend_width = unit(1, "cm"), 
+            show_column_dend = FALSE,
+            row_names_side = "right", 
+            rect_gp = gpar(col = "white", lwd = 2),
+            border_gp = gpar(col = "black", lty = 1),
+            row_names_gp = gpar(fontsize = 8, fontface = "italic"),# fontsize 8
+            column_names_gp = gpar(fontsize = 8), column_names_rot = -60, #rownames size  # fontsize 8
+            left_annotation = row_ha, # this includes the annotation of the graph!
+            width = ncol(plot_matrix_wide3)*unit(8, "mm"), # adjust cell size in heatmap #adjust width unit(8)
+            height = nrow(plot_matrix_wide3)*unit(4, "mm"), # adjust cell size in heatmap
+            row_title = "AMR genes (N=36)",
+            row_title_gp = gpar(fontsize = 8, fontface = 2),
+            row_title_side = "left",
+            heatmap_legend_param = list(title_gp = gpar(fontsize = 8,fontface = 2), labels_gp = gpar(fontsize = 8), at = c(-10, -5, 0, 5, 10),legend_direction = "horizontal", border='black'), #, # fontsize 8
+            #column_order = colnames(plot_matrix_wide2)#,
+            cell_fun = function(j, i, x, y, w, h, fill) {
+              if(matrix_anno_wide3[i, j] < 0.001) {
+                grid.text('***', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.01){
+                grid.text('**', x, y-h*0.01, gp = gpar(fontsize = 6))
+              } else if(matrix_anno_wide3[i, j] < 0.05) {
+                grid.text('*', x, y-h*0.01, gp = gpar(fontsize = 6))
+              }}
+)
+p = draw(p, heatmap_legend_side="left", annotation_legend_side="left") 
+p 
+
+```
+#save Fig. S13
+```{r}
+tiff("heatmap_AMR_N36_withnames_orderedlegend_UNIQUE.tiff", units='mm', width=350, height=400, res=300)
+p
+dev.off()
+```
+
+# Fig. S11
+```{r}
+mpa_table <- read.csv("AMR_elements_absolute_overview.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE, row.names=1)
+mpa_tablet <- as.data.frame(t(mpa_table))
+hostreads_kneaddata <- read.csv("Hostreads_kneaddata.csv", header=TRUE, sep=",", dec=",", stringsAsFactors=FALSE)
+#metadata <- read.csv("Metadata_metaphlan.csv", header=TRUE, dec=",", sep=";", stringsAsFactors=FALSE)
+```
+
+```{r}
+#mpa_tablet$Sample <- rownames(mpa_tablet)
+# Get the order of the samples in metadata_filt
+order <- match(hostreads_kneaddata$Sample, rownames(mpa_tablet))
+
+# Use the order to reorder VF_classes2_input_filt2
+mpatablet_ordered <- mpa_tablet[order, ]
+
+```
+
+```{r}
+mpa_sums <- as.data.frame(rowSums(mpatablet_ordered))
+
+
+perc_AMR <- as.data.frame(mpa_sums$`rowSums(mpatablet_ordered)`/hostreads_kneaddata$decontaminated.hg37dec_v0.1.pair1)
+rownames(perc_AMR) <- rownames(mpa_sums)
+
+```
+
+```{r}
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample <- rownames(metadata)
+
+rownames(metadata) <- metadata$Sample_name
+
+```
+```{r}
+keep <- intersect(rownames(metadata), rownames(perc_AMR))
+perc_AMR2 <- as.data.frame(perc_AMR[keep,])
+```
+```{r}
+metadata2 <- cbind(metadata, perc_AMR2)
+metadata2 <- metadata2 %>% rename_at('perc_AMR[keep, ]', ~'percen_AMR')
+```
+
+```{r}
+
+div_metadata_new <- metadata2                          # Duplicate data
+div_metadata_new$Body_site <- factor(div_metadata_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+
+```
+
+
+#FDR adjusted p-values
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+```{r}
+a <- ggplot(subset(div_metadata_new, Body_site %in% c("Top_scalp","Back_scalp", "Lesional", "Non_Lesional") ), aes(y = percen_AMR, x = Body_site, fill=Body_site)) +
+  geom_boxplot(outlier.shape = NA) +  theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) +
+  theme(panel.grid = element_blank()) + 
+  ylab("AMR reads / total decontaminated reads") + xlab("Group") + scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d"))+ stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=3)
+```
+```{r}
+ggsave("AMR_percenreads_FDRadjusted.png", units="in", width=9, height=7, dpi=400, bg="white")
+```
+```{r}
+mean(metadata2$percen_AMR)
+```
+# percentage of VF genes compared to total reads per sample group
+
+```{r}
+#Hostreads_kneaddata.csv is located in the folder C:\Users\bdpessem\OneDrive - UGent\CMET\Psoriasis_2021\Kneaddata\qstat10% Sample name is corrected with an X in front
+hostreads_kneaddata <- read.csv("Hostreads_kneaddata.csv", header=TRUE, sep=",", dec=",", stringsAsFactors=FALSE)
+mpa_table <- read.csv("virulence_factors_absolute_overview.csv", header=TRUE, dec=".", sep=",", stringsAsFactors=FALSE)
+colnames(mpa_table) <- gsub("_matches.tsv", "", colnames(mpa_table))
+rownames(mpa_table) <- mpa_table$X
+mpa_table2 <- mpa_table[,-1]
+mpa_tablet <- as.data.frame(t(mpa_table2))
+```
+
+```{r}
+#mpa_tablet$Sample <- rownames(mpa_tablet)
+# Get the order of the samples in metadata_filt
+order <- match(hostreads_kneaddata$Sample, rownames(mpa_tablet))
+
+# Use the order to reorder VF_classes2_input_filt2
+mpatablet_ordered <- mpa_tablet[order, ]
+
+```
+```{r}
+mpa_sums <- as.data.frame(rowSums(mpatablet_ordered))
+
+
+perc_AMR <- as.data.frame(mpa_sums$`rowSums(mpatablet_ordered)`/hostreads_kneaddata$decontaminated.hg37dec_v0.1.pair1)
+rownames(perc_AMR) <- rownames(mpa_sums)
+
+```
+
+
+```{r}
+
+metadata <- read.csv("metadata_metaphlan.csv", header=TRUE, row.names=1,sep=",", dec =".", stringsAsFactors=FALSE)
+
+metadata$Sample <- rownames(metadata)
+
+rownames(metadata) <- metadata$Sample_name
+
+```
+
+```{r}
+keep <- intersect(rownames(metadata), rownames(perc_AMR))
+perc_AMR2 <- as.data.frame(perc_AMR[keep,])
+```
+```{r}
+metadata2 <- cbind(metadata, perc_AMR2)
+metadata2 <- metadata2 %>% rename_at('perc_AMR[keep, ]', ~'percen_VF')
+```
+
+```{r}
+
+div_metadata_new <- metadata2                          # Duplicate data
+div_metadata_new$Body_site <- factor(div_metadata_new$Body_site,     # Reorder factor levels
+                         c("Top_scalp", "Back_scalp", "Lesional", "Non_Lesional"))
+
+```
+
+
+#FDR adjusted p-values
+```{r}
+my_comparisons <- list(
+  c("Top_scalp", "Back_scalp"),
+   c("Non_Lesional", "Lesional"),
+  c("Lesional", "Back_scalp"),
+  c("Lesional", "Top_scalp"),
+  c("Non_Lesional", "Back_scalp"),
+  c("Non_Lesional", "Top_scalp")
+)
+```
+```{r}
+b <- ggplot(subset(div_metadata_new, Body_site %in% c("Top_scalp","Back_scalp", "Lesional", "Non_Lesional") ), aes(y = percen_VF, x = Body_site, fill=Body_site)) +
+  geom_boxplot(outlier.shape = NA) +  theme_bw() +
+  geom_point(position = position_jitter(width = 0.25), pch=21) +
+  theme(panel.grid = element_blank()) + 
+  ylab("VF reads / total decontaminated reads") + xlab("Group") + scale_fill_manual(values=c("#018571", "#80cdc1", "#a6611a","#dfc27d")) + stat_compare_means(label= "p.signif",comparisons = my_comparisons,method="wilcox.test", p.adjust.method="BH", size=3)
+```
+
+```{r}
+mean(metadata2$percen_VF)
+```
+```{r}
+ggsave("VF_percenreads_FDRadjusted.png", units="in", width=9, height=7, dpi=400, bg="white")
+```
+
+```{r}
+figure <- ggarrange(b,a,ncol=2, nrow=1, align="hv", labels=c("A","B"), font.label=list(size=14), common.legend=TRUE)
+```
+#save Fig. S11
+
+```{r}
+ggsave("Psoriasiscapitis_VFAMR.png", units="in", width=9, height=5, dpi=400, bg="white")
+```
+

@@ -1,0 +1,219 @@
+feature,metadata,value,coef,stderr,N,N.not.0,pval,qval,Heatmap_value,Superclass_1,Superclass_2
+PWY0 1586 peptidoglycan maturation meso diaminopimelate containing ,Body_site,Lesional vs Top_scalp,3.039358316,0.444736949,74,74,2.23E-09,7.52E-07,6.12E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-7211 superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis,Body_site,Lesional vs Top_scalp,-3.141719976,0.558508471,74,55,3.32E-07,3.99E-05,-4.40E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY66 409 superpathway of purine nucleotide salvage,Body_site,Lesional vs Top_scalp,-0.974872598,0.173820304,74,68,3.55E-07,3.99E-05,-4.40E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+HISTSYN PWY- L histidine biosynthesis,Body_site,Lesional vs Top_scalp,-1.132753165,0.207802824,74,70,6.67E-07,5.30E-05,-4.28E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7039 phosphatidate metabolism as a signaling molecule,Body_site,Lesional vs Top_scalp,-3.459849511,0.639564815,74,56,7.86E-07,5.30E-05,-4.28E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-841 superpathway of purine nucleotides de novo biosynthesis I,Body_site,Lesional vs Top_scalp,-0.551346333,0.107370289,74,70,2.31E-06,0.000111324,-3.95E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY0 166 superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis E coli ,Body_site,Lesional vs Top_scalp,-5.925199738,1.146271745,74,55,2.02E-06,0.000111324,-3.95E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+UDPNACETYLGALSYN PWY- UDP N acetyl D glucosamine biosynthesis II,Body_site,Lesional vs Top_scalp,-3.16893973,0.623650718,74,56,2.85E-06,0.000119989,-3.92E+00,Biosynthesis,Carbohydrate Biosynthesis
+PWY-6126 superpathway of adenosine nucleotides de novo biosynthesis II,Body_site,Lesional vs Top_scalp,-0.614343858,0.125796484,74,72,6.09E-06,0.000170887,-3.77E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6387 UDP N acetylmuramoyl pentapeptide biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Top_scalp,-0.404481901,0.082795402,74,74,6.05E-06,0.000170887,-3.77E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-7560 methylerythritol phosphate pathway II,Body_site,Lesional vs Top_scalp,-1.169922461,0.236450427,74,70,4.76E-06,0.000170887,-3.77E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+UDPNAGSYN PWY- UDP N acetyl D glucosamine biosynthesis I,Body_site,Lesional vs Top_scalp,-0.496975592,0.100876663,74,74,5.17E-06,0.000170887,-3.77E+00,Biosynthesis,Carbohydrate Biosynthesis
+PEPTIDOGLYCANSYN PWY- peptidoglycan biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Top_scalp,-0.389400632,0.080623637,74,74,7.46E-06,0.000193496,-3.71E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-8187 L arginine degradation XIII reductive Stickland reaction ,Body_site,Lesional vs Top_scalp,-0.575539371,0.120299979,74,74,8.87E-06,0.000213537,-3.67E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+COA PWY-1 superpathway of coenzyme A biosynthesis III mammals ,Body_site,Lesional vs Top_scalp,-0.688570022,0.145027194,74,68,1.02E-05,0.000228538,-3.64E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6386 UDP N acetylmuramoyl pentapeptide biosynthesis II lysine containing ,Body_site,Lesional vs Top_scalp,-0.348726903,0.074255539,74,74,1.23E-05,0.000259979,-3.59E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-6125 superpathway of guanosine nucleotides de novo biosynthesis II,Body_site,Lesional vs Top_scalp,-0.7199721,0.154514652,74,71,1.42E-05,0.000265086,-3.58E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6270 isoprene biosynthesis I,Body_site,Lesional vs Top_scalp,-1.144837146,0.24518792,74,70,1.37E-05,0.000265086,-3.58E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY-7229 superpathway of adenosine nucleotides de novo biosynthesis I,Body_site,Lesional vs Top_scalp,-0.603762508,0.131305969,74,72,1.78E-05,0.000315569,-3.50E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY0 1477 ethanolamine utilization,Body_site,Lesional vs Top_scalp,2.67511448,0.5949714,74,70,2.59E-05,0.000436516,3.36E+00,Degradation/Utilization/Assimilation,Amine and Polyamine Degradation
+GLYCOGENSYNTH PWY- glycogen biosynthesis I from ADP D Glucose ,Body_site,Lesional vs Top_scalp,1.472304666,0.331660751,74,74,3.19E-05,0.000450666,3.35E+00,Biosynthesis,Carbohydrate Biosynthesis
+PWY-5080 very long chain fatty acid biosynthesis I,Body_site,Lesional vs Top_scalp,-2.678329322,0.603554161,74,47,3.21E-05,0.000450666,-3.35E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-6121 5 aminoimidazole ribonucleotide biosynthesis I,Body_site,Lesional vs Top_scalp,-0.32846815,0.073737994,74,74,3.02E-05,0.000450666,-3.35E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-724 superpathway of L lysine L threonine and L methionine biosynthesis II,Body_site,Lesional vs Top_scalp,-0.752601961,0.168573776,74,70,2.91E-05,0.000450666,-3.35E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7851 coenzyme A biosynthesis II eukaryotic ,Body_site,Lesional vs Top_scalp,-0.645143716,0.147411794,74,69,4.01E-05,0.000540143,-3.27E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6823 molybdopterin biosynthesis,Body_site,Lesional vs Top_scalp,-0.78865301,0.183461546,74,73,5.30E-05,0.00068721,-3.16E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-5097 L lysine biosynthesis VI,Body_site,Lesional vs Top_scalp,-0.769525248,0.184362163,74,70,8.27E-05,0.000994818,-3.00E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6545 pyrimidine deoxyribonucleotides de novo biosynthesis III,Body_site,Lesional vs Top_scalp,-3.674423276,0.879529893,74,62,8.16E-05,0.000994818,-3.00E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+NONMEVIPP PWY- methylerythritol phosphate pathway I,Body_site,Lesional vs Top_scalp,-0.831893013,0.201302011,74,72,9.56E-05,0.001110024,-2.95E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY-7790 UMP biosynthesis II,Body_site,Lesional vs Top_scalp,-0.492666043,0.119484283,74,73,9.88E-05,0.001110024,-2.95E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-5873 ubiquinol 7 biosynthesis late decarboxylation ,Body_site,Lesional vs Top_scalp,-2.621614269,0.643741386,74,54,0.000118035,0.001283155,-2.89E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7663 gondoate biosynthesis anaerobic ,Body_site,Lesional vs Top_scalp,1.221248032,0.303800923,74,74,0.00014169,0.001492173,2.83E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-7228 superpathway of guanosine nucleotides de novo biosynthesis I,Body_site,Lesional vs Top_scalp,-0.550042655,0.137688653,74,72,0.000154515,0.001577923,-2.80E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6122 5 aminoimidazole ribonucleotide biosynthesis II,Body_site,Lesional vs Top_scalp,-0.299867996,0.075720722,74,74,0.000174089,0.001676224,-2.78E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6277 superpathway of 5 aminoimidazole ribonucleotide biosynthesis,Body_site,Lesional vs Top_scalp,-0.299867996,0.075720722,74,74,0.000174089,0.001676224,-2.78E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-1042 glycolysis IV,Body_site,Lesional vs Top_scalp,0.883574274,0.225739593,74,74,0.00020382,0.001855546,2.73E+00,Generation of Precursor Metabolites and Energy,Glycolysis
+PWY-6700 queuosine biosynthesis I de novo ,Body_site,Lesional vs Top_scalp,1.934324673,0.494935484,74,73,0.00020796,0.001855546,2.73E+00,Macromolecule Modification,Nucleic Acid Processing
+PWY-7953 UDP N acetylmuramoyl pentapeptide biosynthesis III meso diaminopimelate containing ,Body_site,Lesional vs Top_scalp,-0.428157613,0.109602778,74,74,0.000209231,0.001855546,-2.73E+00,Biosynthesis,Cell Structure Biosynthesis
+DAPLYSINESYN PWY- L lysine biosynthesis I,Body_site,Lesional vs Top_scalp,-0.574935357,0.148445925,74,72,0.000234416,0.002016732,-2.70E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7197 pyrimidine deoxyribonucleotide phosphorylation,Body_site,Lesional vs Top_scalp,-0.668948008,0.173016806,74,72,0.000239765,0.002016732,-2.70E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7791 UMP biosynthesis III,Body_site,Lesional vs Top_scalp,-0.464869423,0.120445976,74,73,0.000245359,0.002016732,-2.70E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+GLYOXYLATE BYPASS glyoxylate cycle,Body_site,Lesional vs Top_scalp,2.065627932,0.541770261,74,72,0.000287369,0.002235447,2.65E+00,Generation of Precursor Metabolites and Energy,
+PWY-7199 pyrimidine deoxyribonucleosides salvage,Body_site,Lesional vs Top_scalp,-0.753774108,0.197610689,74,71,0.000285728,0.002235447,-2.65E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7221 guanosine ribonucleotides de novo biosynthesis,Body_site,Lesional vs Top_scalp,-0.386419103,0.101615007,74,74,0.000297153,0.002235447,-2.65E+00,Biosynthesis,Nucleoside and Nucleotide Degradation
+PWY-7977 L methionine biosynthesis IV,Body_site,Lesional vs Top_scalp,1.959544468,0.51547599,74,72,0.000298502,0.002235447,2.65E+00,Biosynthesis,Amino Acid Biosynthesis
+HEME BIOSYNTHESIS II heme b biosynthesis I aerobic ,Body_site,Lesional vs Top_scalp,-0.448678857,0.119078167,74,74,0.000333937,0.002446451,-2.61E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7111 pyruvate fermentation to isobutanol engineered ,Body_site,Lesional vs Top_scalp,0.915579014,0.244549789,74,74,0.000361762,0.002593911,2.59E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-5103 L isoleucine biosynthesis III,Body_site,Lesional vs Top_scalp,0.885270626,0.245386735,74,74,0.000566748,0.003979043,2.40E+00,Biosynthesis,Amino Acid Biosynthesis
+ARO PWY- chorismate biosynthesis I,Body_site,Lesional vs Top_scalp,-0.377397826,0.105044563,74,73,0.00059494,0.004037397,-2.39E+00,Biosynthesis,Aromatic Compound Biosynthesis
+PWY-7220 adenosine deoxyribonucleotides de novo biosynthesis II,Body_site,Lesional vs Top_scalp,-0.619107619,0.17271602,74,72,0.000611001,0.004037397,-2.39E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7222 guanosine deoxyribonucleotides de novo biosynthesis II,Body_site,Lesional vs Top_scalp,-0.619107619,0.17271602,74,72,0.000611001,0.004037397,-2.39E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-5667 CDP diacylglycerol biosynthesis I,Body_site,Lesional vs Top_scalp,1.829206988,0.519322058,74,72,0.000747063,0.004750192,2.32E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY66 389 phytol degradation,Body_site,Lesional vs Top_scalp,1.413760804,0.401045681,74,72,0.000740159,0.004750192,2.32E+00,Degradation/Utilization/Assimilation,Alcohol Degradation
+PWY-6606 guanosine nucleotides degradation II,Body_site,Lesional vs Top_scalp,1.841855592,0.52427554,74,68,0.000769347,0.004801294,2.32E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+PWY-5154 L arginine biosynthesis III via N acetyl L citrulline ,Body_site,Lesional vs Top_scalp,1.349909902,0.386191602,74,72,0.000814244,0.004989093,2.30E+00,Biosynthesis,Amino Acid Biosynthesis
+HSERMETANA PWY- L methionine biosynthesis III,Body_site,Lesional vs Top_scalp,1.416774771,0.407036617,74,73,0.000853493,0.005136201,2.29E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7208 superpathway of pyrimidine nucleobases salvage,Body_site,Lesional vs Top_scalp,-0.465633465,0.135688119,74,72,0.000997483,0.005866798,-2.23E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY0 1319 CDP diacylglycerol biosynthesis II,Body_site,Lesional vs Top_scalp,1.781774894,0.519802601,74,72,0.001009716,0.005866798,2.23E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+ILEUSYN PWY- L isoleucine biosynthesis I from threonine ,Body_site,Lesional vs Top_scalp,0.742181133,0.219179808,74,74,0.001151176,0.006575364,2.18E+00,Biosynthesis,Amino Acid Biosynthesis
+SO4ASSIM PWY- assimilatory sulfate reduction I,Body_site,Lesional vs Top_scalp,1.326042035,0.39309805,74,73,0.001198556,0.006731888,2.17E+00,Degradation/Utilization/Assimilation,
+PWY-6147 6 hydroxymethyl dihydropterin diphosphate biosynthesis I,Body_site,Lesional vs Top_scalp,-1.143552389,0.340006334,74,70,0.001236592,0.006831661,-2.17E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-5028 L histidine degradation II,Body_site,Lesional vs Top_scalp,-1.021640863,0.305829301,74,72,0.001327623,0.007164544,-2.14E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+PWY-5130 2 oxobutanoate degradation I,Body_site,Lesional vs Top_scalp,-2.069550868,0.620047404,74,28,0.001339366,0.007164544,-2.14E+00,Degradation/Utilization/Assimilation,Carboxylate Degradation
+PWY-2942 L lysine biosynthesis III,Body_site,Lesional vs Top_scalp,-0.517643483,0.155592936,74,72,0.001385191,0.007293895,-2.14E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6123 inosine 5 phosphate biosynthesis I,Body_site,Lesional vs Top_scalp,-0.399506175,0.120916356,74,73,0.00148717,0.007710404,-2.11E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7238 sucrose biosynthesis II,Body_site,Lesional vs Top_scalp,-0.675653426,0.208699098,74,74,0.001824646,0.009316752,-2.03E+00,Biosynthesis,Carbohydrate Biosynthesis
+RIBOSYN2 PWY- flavin biosynthesis I bacteria and plants ,Body_site,Lesional vs Top_scalp,-0.817589688,0.252976754,74,69,0.001855972,0.009335263,-2.03E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+ARGSYN PWY- L arginine biosynthesis I via L ornithine ,Body_site,Lesional vs Top_scalp,-0.355663184,0.110668468,74,74,0.001961204,0.009719498,-2.01E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7198 pyrimidine deoxyribonucleotides de novo biosynthesis IV,Body_site,Lesional vs Top_scalp,-1.580388525,0.494362678,74,71,0.002064778,0.010084494,-2.00E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6936 seleno amino acid biosynthesis plants ,Body_site,Lesional vs Top_scalp,1.220471696,0.384749148,74,72,0.002224873,0.010711174,1.97E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-5686 UMP biosynthesis I,Body_site,Lesional vs Top_scalp,-0.316717327,0.100398303,74,74,0.00234537,0.010996626,-1.96E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7234 inosine 5 phosphate biosynthesis III,Body_site,Lesional vs Top_scalp,-0.600316591,0.190332983,74,70,0.002349428,0.010996626,-1.96E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+ANAGLYCOLYSIS PWY- glycolysis III from glucose ,Body_site,Lesional vs Top_scalp,0.871389827,0.277219778,74,73,0.002426253,0.011200646,1.95E+00,Generation of Precursor Metabolites and Energy,Glycolysis
+PWY0 1296 purine ribonucleosides degradation,Body_site,Lesional vs Top_scalp,-0.551925705,0.176142416,74,71,0.002499397,0.011382387,-1.94E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+PWY-6151 S adenosyl L methionine salvage I,Body_site,Lesional vs Top_scalp,-0.427211295,0.136824959,74,74,0.002583645,0.011609176,-1.94E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-5941 glycogen degradation II,Body_site,Lesional vs Top_scalp,0.925746254,0.297016805,74,74,0.002626462,0.011646284,1.93E+00,Degradation/Utilization/Assimilation,Carbohydrate Degradation
+PWY-5913 partial TCA cycle obligate autotrophs ,Body_site,Lesional vs Top_scalp,1.950580941,0.629166227,74,72,0.002759202,0.012075989,1.92E+00,Generation of Precursor Metabolites and Energy,TCA cycle
+PWY-5845 superpathway of menaquinol 9 biosynthesis,Body_site,Lesional vs Top_scalp,-1.501891776,0.485568021,74,20,0.002818891,0.012179056,-1.91E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-5862 superpathway of demethylmenaquinol 9 biosynthesis,Body_site,Lesional vs Top_scalp,-1.522714574,0.493011109,74,20,0.002856463,0.012185165,-1.91E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+ARGSYNBSUB PWY- L arginine biosynthesis II acetyl cycle ,Body_site,Lesional vs Top_scalp,-0.319807974,0.10383266,74,74,0.002929947,0.012342402,-1.91E+00,Biosynthesis,Amino Acid Biosynthesis
+HISDEG PWY- L histidine degradation I,Body_site,Lesional vs Top_scalp,-0.426230757,0.138927906,74,73,0.003036121,0.012631763,-1.90E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+P23 PWY- reductive TCA cycle I,Body_site,Lesional vs Top_scalp,-2.847054049,0.93218091,74,57,0.003162417,0.012996761,-1.89E+00,Degradation/Utilization/Assimilation,C1 Compound Utilization and Assimilation
+PWY66 429 fatty acid biosynthesis initiation mitochondria ,Body_site,Lesional vs Top_scalp,1.489767317,0.494898899,74,69,0.003597406,0.014606336,1.84E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+BRANCHED CHAIN AA SYN PWY- superpathway of branched chain amino acid biosynthesis,Body_site,Lesional vs Top_scalp,0.604757324,0.202331234,74,74,0.003827682,0.015023533,1.82E+00,Biosynthesis,Amino Acid Biosynthesis
+GLUTORN PWY- L ornithine biosynthesis I,Body_site,Lesional vs Top_scalp,-0.47974709,0.160556827,74,74,0.003838003,0.015023533,-1.82E+00,Biosynthesis,Amino Acid Biosynthesis
+P124 PWY- Bifidobacterium shunt,Body_site,Lesional vs Top_scalp,-3.013977273,1.009503588,74,44,0.00386505,0.015023533,-1.82E+00,Degradation/Utilization/Assimilation,Carbohydrate Degradation
+PWY-6608 guanosine nucleotides degradation III,Body_site,Lesional vs Top_scalp,1.770551985,0.593470667,74,69,0.003890019,0.015023533,1.82E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+THRESYN PWY- superpathway of L threonine biosynthesis,Body_site,Lesional vs Top_scalp,-0.302870754,0.101618395,74,74,0.003923059,0.015023533,-1.82E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-101 photosynthesis light reactions,Body_site,Lesional vs Top_scalp,-3.557901901,1.210033328,74,38,0.004405411,0.016495816,-1.78E+00,Generation of Precursor Metabolites and Energy,Electron Transfer Chains
+PWY-2201 folate transformations I,Body_site,Lesional vs Top_scalp,-2.410383009,0.819505695,74,15,0.004393631,0.016495816,-1.78E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6385 peptidoglycan biosynthesis III mycobacteria ,Body_site,Lesional vs Top_scalp,-0.24357884,0.083151845,74,74,0.004546978,0.01683881,-1.77E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY0 781 aspartate superpathway,Body_site,Lesional vs Top_scalp,-1.738907879,0.604970022,74,49,0.005318748,0.019482806,-1.71E+00,,
+PWY-6163 chorismate biosynthesis from 3 dehydroquinate,Body_site,Lesional vs Top_scalp,-0.327675264,0.114264816,74,73,0.005420492,0.019641999,-1.71E+00,Biosynthesis,Aromatic Compound Biosynthesis
+PWY-6609 adenine and adenosine salvage III,Body_site,Lesional vs Top_scalp,-0.445649439,0.159725254,74,71,0.00673928,0.024161037,-1.62E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-3841 folate transformations II plants ,Body_site,Lesional vs Top_scalp,-0.383676167,0.137717358,74,73,0.006817166,0.024182998,-1.62E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7118 chitin deacetylation,Body_site,Lesional vs Top_scalp,0.924360523,0.333448111,74,74,0.007084119,0.024868208,1.60E+00,Degradation/Utilization/Assimilation,Carbohydrate Degradation
+PWY-5840 superpathway of menaquinol 7 biosynthesis,Body_site,Lesional vs Top_scalp,-2.527789459,0.916889655,74,51,0.007388482,0.025669263,-1.59E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY1G 0 mycothiol biosynthesis,Body_site,Lesional vs Top_scalp,-1.547955439,0.574650367,74,57,0.008785342,0.030210819,-1.52E+00,Biosynthesis,Other Biosynthesis
+PWY-5136 fatty acid beta oxidation II plant peroxisome ,Body_site,Lesional vs Top_scalp,1.796362427,0.668863774,74,68,0.008979451,0.030566415,1.51E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7383 anaerobic energy metabolism invertebrates cytosol ,Body_site,Lesional vs Top_scalp,0.872550112,0.325398631,74,72,0.009082669,0.030608594,1.51E+00,Generation of Precursor Metabolites and Energy,Fermentation
+HEMESYN2 PWY- heme b biosynthesis II oxygen independent ,Body_site,Lesional vs Top_scalp,2.10199823,0.787969894,74,65,0.009430212,0.031169714,1.51E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-702 L methionine biosynthesis II,Body_site,Lesional vs Top_scalp,1.145729512,0.429521166,74,72,0.009434157,0.031169714,1.51E+00,Biosynthesis,Amino Acid Biosynthesis
+CITRULBIO PWY- L citrulline biosynthesis,Body_site,Lesional vs Top_scalp,0.754989316,0.284666514,74,74,0.009830925,0.032165258,1.49E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6897 thiamine diphosphate salvage II,Body_site,Lesional vs Top_scalp,-0.420700349,0.158940874,74,73,0.009971896,0.03231278,-1.49E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+P122 PWY- heterolactic fermentation,Body_site,Lesional vs Top_scalp,-2.142544466,0.811884992,74,37,0.010186465,0.032693704,-1.49E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-5188 tetrapyrrole biosynthesis I from glutamate ,Body_site,Lesional vs Top_scalp,-0.415566655,0.158996243,74,73,0.01089963,0.034652596,-1.46E+00,Biosynthesis,Tetrapyrrole Biosynthesis
+PWY-5695 inosine 5 phosphate degradation,Body_site,Lesional vs Top_scalp,1.539133785,0.591596778,74,71,0.011254514,0.03544646,1.45E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+PWY-7357 thiamine phosphate formation from pyrithiamine and oxythiamine yeast ,Body_site,Lesional vs Top_scalp,-0.465424527,0.183283262,74,73,0.013265309,0.041392676,-1.38E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-5100 pyruvate fermentation to acetate and lactate II,Body_site,Lesional vs Top_scalp,0.975949345,0.390570623,74,73,0.014744811,0.045587169,1.34E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-5080 very long chain fatty acid biosynthesis I,Body_site,Lesional vs Back_scalp,-3.954558146,0.613822973,73,48,1.22E-08,3.11E-06,-5.51E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-7039 phosphatidate metabolism as a signaling molecule,Body_site,Lesional vs Back_scalp,-4.100173645,0.647044372,73,56,1.88E-08,3.11E-06,-5.51E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY0 1586 peptidoglycan maturation meso diaminopimelate containing ,Body_site,Lesional vs Back_scalp,2.992810611,0.508554217,73,72,1.20E-07,1.32E-05,4.88E+00,Biosynthesis,Cell Structure Biosynthesis
+UDPNACETYLGALSYN PWY- UDP N acetyl D glucosamine biosynthesis II,Body_site,Lesional vs Back_scalp,-3.780062484,0.669856597,73,54,3.19E-07,2.63E-05,-4.58E+00,Biosynthesis,Carbohydrate Biosynthesis
+PWY0 1477 ethanolamine utilization,Body_site,Lesional vs Back_scalp,3.19234608,0.631763822,73,67,3.25E-06,0.000214523,3.67E+00,Degradation/Utilization/Assimilation,Amine and Polyamine Degradation
+PWY66 409 superpathway of purine nucleotide salvage,Body_site,Lesional vs Back_scalp,-0.905553688,0.181524825,73,67,4.16E-06,0.000228977,-3.64E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-8187 L arginine degradation XIII reductive Stickland reaction ,Body_site,Lesional vs Back_scalp,-0.586955808,0.126396011,73,73,1.53E-05,0.000720449,-3.14E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+PWY-5873 ubiquinol 7 biosynthesis late decarboxylation ,Body_site,Lesional vs Back_scalp,-2.509866917,0.54481932,73,54,1.75E-05,0.000722981,-3.14E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+HISTSYN PWY- L histidine biosynthesis,Body_site,Lesional vs Back_scalp,-1.100840154,0.244481694,73,69,2.57E-05,0.000942194,-3.03E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-841 superpathway of purine nucleotides de novo biosynthesis I,Body_site,Lesional vs Back_scalp,-0.513441766,0.118992131,73,69,5.07E-05,0.001521698,-2.82E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+UDPNAGSYN PWY- UDP N acetyl D glucosamine biosynthesis I,Body_site,Lesional vs Back_scalp,-0.45095381,0.104457042,73,73,5.03E-05,0.001521698,-2.82E+00,Biosynthesis,Carbohydrate Biosynthesis
+COA PWY-1 superpathway of coenzyme A biosynthesis III mammals ,Body_site,Lesional vs Back_scalp,-0.624564672,0.148158629,73,67,7.23E-05,0.001987479,-2.70E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6121 5 aminoimidazole ribonucleotide biosynthesis I,Body_site,Lesional vs Back_scalp,-0.317345101,0.076476488,73,73,9.12E-05,0.002188187,-2.66E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6126 superpathway of adenosine nucleotides de novo biosynthesis II,Body_site,Lesional vs Back_scalp,-0.555241447,0.133970938,73,71,9.28E-05,0.002188187,-2.66E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7229 superpathway of adenosine nucleotides de novo biosynthesis I,Body_site,Lesional vs Back_scalp,-0.561088941,0.136706079,73,71,0.00010684,0.002350484,-2.63E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7211 superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis,Body_site,Lesional vs Back_scalp,-3.413466185,0.842366526,73,50,0.000128084,0.002641733,-2.58E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6125 superpathway of guanosine nucleotides de novo biosynthesis II,Body_site,Lesional vs Back_scalp,-0.648896761,0.165665693,73,70,0.000203942,0.003958865,-2.40E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7560 methylerythritol phosphate pathway II,Body_site,Lesional vs Back_scalp,-0.988944625,0.258031393,73,69,0.000271255,0.004964616,-2.30E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY-7851 coenzyme A biosynthesis II eukaryotic ,Body_site,Lesional vs Back_scalp,-0.574423577,0.150488117,73,68,0.000285842,0.004964616,-2.30E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7790 UMP biosynthesis II,Body_site,Lesional vs Back_scalp,-0.462832829,0.123289788,73,72,0.000352881,0.005822529,-2.23E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6823 molybdopterin biosynthesis,Body_site,Lesional vs Back_scalp,-0.754755634,0.20320771,73,72,0.000402693,0.006328031,-2.20E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6270 isoprene biosynthesis I,Body_site,Lesional vs Back_scalp,-0.967180082,0.265040425,73,69,0.00049875,0.007481253,-2.13E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY-5103 L isoleucine biosynthesis III,Body_site,Lesional vs Back_scalp,0.980042552,0.273272165,73,73,0.000612055,0.007647778,2.12E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6147 6 hydroxymethyl dihydropterin diphosphate biosynthesis I,Body_site,Lesional vs Back_scalp,-1.153686212,0.320246021,73,69,0.000580759,0.007647778,-2.12E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7111 pyruvate fermentation to isobutanol engineered ,Body_site,Lesional vs Back_scalp,0.983831646,0.274287286,73,73,0.000610982,0.007647778,2.12E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-7199 pyrimidine deoxyribonucleosides salvage,Body_site,Lesional vs Back_scalp,-0.73829483,0.204368072,73,70,0.000562042,0.007647778,-2.12E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7663 gondoate biosynthesis anaerobic ,Body_site,Lesional vs Back_scalp,0.996833587,0.278483797,73,73,0.000625727,0.007647778,2.12E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-6122 5 aminoimidazole ribonucleotide biosynthesis II,Body_site,Lesional vs Back_scalp,-0.277638968,0.078370629,73,73,0.000704777,0.008019879,-2.10E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6277 superpathway of 5 aminoimidazole ribonucleotide biosynthesis,Body_site,Lesional vs Back_scalp,-0.277638968,0.078370629,73,73,0.000704777,0.008019879,-2.10E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7977 L methionine biosynthesis IV,Body_site,Lesional vs Back_scalp,2.011389731,0.579501151,73,71,0.000886557,0.009752124,2.01E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-5840 superpathway of menaquinol 7 biosynthesis,Body_site,Lesional vs Back_scalp,-2.670839451,0.771968034,73,52,0.000918425,0.009776783,-2.01E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7791 UMP biosynthesis III,Body_site,Lesional vs Back_scalp,-0.431639602,0.12587026,73,72,0.00101162,0.010432332,-1.98E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+ILEUSYN PWY- L isoleucine biosynthesis I from threonine ,Body_site,Lesional vs Back_scalp,0.838165881,0.245736473,73,73,0.001072049,0.010720494,1.97E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6386 UDP N acetylmuramoyl pentapeptide biosynthesis II lysine containing ,Body_site,Lesional vs Back_scalp,-0.24645604,0.073424035,73,73,0.001270437,0.012330716,-1.91E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-5028 L histidine degradation II,Body_site,Lesional vs Back_scalp,-1.014656897,0.306550606,73,71,0.001468554,0.013846371,-1.86E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+PWY-724 superpathway of L lysine L threonine and L methionine biosynthesis II,Body_site,Lesional vs Back_scalp,-0.567342108,0.174149205,73,69,0.001723894,0.01580236,-1.80E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-7221 guanosine ribonucleotides de novo biosynthesis,Body_site,Lesional vs Back_scalp,-0.363990908,0.113001881,73,73,0.001928018,0.01719584,-1.76E+00,Biosynthesis,Nucleoside and Nucleotide Degradation
+PWY-5913 partial TCA cycle obligate autotrophs ,Body_site,Lesional vs Back_scalp,2.021596376,0.633661671,73,71,0.002116435,0.018379565,1.74E+00,Generation of Precursor Metabolites and Energy,TCA cycle
+PWY-7228 superpathway of guanosine nucleotides de novo biosynthesis I,Body_site,Lesional vs Back_scalp,-0.476041975,0.149792108,73,71,0.002196633,0.018586897,-1.73E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+BRANCHED CHAIN AA SYN PWY- superpathway of branched chain amino acid biosynthesis,Body_site,Lesional vs Back_scalp,0.707919362,0.227364638,73,73,0.002664328,0.021526659,1.67E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6123 inosine 5 phosphate biosynthesis I,Body_site,Lesional vs Back_scalp,-0.385002943,0.123703566,73,72,0.002674524,0.021526659,-1.67E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+GLYOXYLATE BYPASS glyoxylate cycle,Body_site,Lesional vs Back_scalp,2.199152061,0.714615444,73,70,0.002966274,0.02166634,1.66E+00,Generation of Precursor Metabolites and Energy,
+HEMESYN2 PWY- heme b biosynthesis II oxygen independent ,Body_site,Lesional vs Back_scalp,2.546422525,0.827740489,73,61,0.002975392,0.02166634,1.66E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PEPTIDOGLYCANSYN PWY- peptidoglycan biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Back_scalp,-0.273821029,0.089154845,73,73,0.003020157,0.02166634,-1.66E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-6387 UDP N acetylmuramoyl pentapeptide biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Back_scalp,-0.280987002,0.090895415,73,73,0.002846475,0.02166634,-1.66E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY0 166 superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis E coli ,Body_site,Lesional vs Back_scalp,-3.469289404,1.125810262,73,49,0.002929659,0.02166634,-1.66E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+HEME BIOSYNTHESIS II heme b biosynthesis I aerobic ,Body_site,Lesional vs Back_scalp,-0.388451031,0.128114093,73,73,0.003389329,0.02379742,-1.62E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+NONMEVIPP PWY- methylerythritol phosphate pathway I,Body_site,Lesional vs Back_scalp,-0.671022085,0.222931069,73,71,0.003615096,0.024853786,-1.60E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY-7234 inosine 5 phosphate biosynthesis III,Body_site,Lesional vs Back_scalp,-0.548317647,0.182712604,73,69,0.003711246,0.024994102,-1.60E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY0 1296 purine ribonucleosides degradation,Body_site,Lesional vs Back_scalp,-0.545625698,0.182238512,73,70,0.003787155,0.024995226,-1.60E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+PWY-7197 pyrimidine deoxyribonucleotide phosphorylation,Body_site,Lesional vs Back_scalp,-0.555887968,0.188463194,73,71,0.004306413,0.027865026,-1.55E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-5097 L lysine biosynthesis VI,Body_site,Lesional vs Back_scalp,-0.559682179,0.19038678,73,69,0.004430391,0.028115943,-1.55E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6545 pyrimidine deoxyribonucleotides de novo biosynthesis III,Body_site,Lesional vs Back_scalp,-2.924172976,1.002165377,73,60,0.004716707,0.029368176,-1.53E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6606 guanosine nucleotides degradation II,Body_site,Lesional vs Back_scalp,1.951617453,0.672058218,73,68,0.004907782,0.029992003,1.52E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+ARGSYN PWY- L arginine biosynthesis I via L ornithine ,Body_site,Lesional vs Back_scalp,-0.338115633,0.116753101,73,73,0.005020181,0.030076232,-1.52E+00,Biosynthesis,Amino Acid Biosynthesis
+HEME BIOSYNTHESIS II 1 heme b biosynthesis V aerobic ,Body_site,Lesional vs Back_scalp,2.087216186,0.725002942,73,60,0.005269678,0.030076232,1.52E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+HSERMETANA PWY- L methionine biosynthesis III,Body_site,Lesional vs Back_scalp,1.175645392,0.408521197,73,72,0.005286126,0.030076232,1.52E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-6700 queuosine biosynthesis I de novo ,Body_site,Lesional vs Back_scalp,1.401339961,0.486859025,73,72,0.005278336,0.030076232,1.52E+00,Macromolecule Modification,Nucleic Acid Processing
+GLYCOGENSYNTH PWY- glycogen biosynthesis I from ADP D Glucose ,Body_site,Lesional vs Back_scalp,0.914968111,0.319130315,73,73,0.005449275,0.030478996,1.52E+00,Biosynthesis,Carbohydrate Biosynthesis
+HISDEG PWY- L histidine degradation I,Body_site,Lesional vs Back_scalp,-0.423587255,0.150671575,73,72,0.006373026,0.03449308,-1.46E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation
+PWY-5188 tetrapyrrole biosynthesis I from glutamate ,Body_site,Lesional vs Back_scalp,-0.454614179,0.162385963,73,72,0.006585043,0.03449308,-1.46E+00,Biosynthesis,Tetrapyrrole Biosynthesis
+PWY-5667 CDP diacylglycerol biosynthesis I,Body_site,Lesional vs Back_scalp,1.60190066,0.57106899,73,70,0.006484888,0.03449308,1.46E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-6609 adenine and adenosine salvage III,Body_site,Lesional vs Back_scalp,-0.46039712,0.163946266,73,70,0.006428557,0.03449308,-1.46E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-5686 UMP biosynthesis I,Body_site,Lesional vs Back_scalp,-0.289907979,0.103808719,73,73,0.006712252,0.034610052,-1.46E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6215 4 chlorobenzoate degradation,Body_site,Lesional vs Back_scalp,-2.013521263,0.72391086,73,27,0.006925488,0.035128063,-1.45E+00,Degradation/Utilization/Assimilation,Aromatic Compound Degradation
+PWY0 1319 CDP diacylglycerol biosynthesis II,Body_site,Lesional vs Back_scalp,1.589025229,0.572359853,73,70,0.007025613,0.035128063,1.45E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-1042 glycolysis IV,Body_site,Lesional vs Back_scalp,0.619942927,0.224304764,73,73,0.007271279,0.035813762,1.45E+00,Generation of Precursor Metabolites and Energy,Glycolysis
+PWY-6151 S adenosyl L methionine salvage I,Body_site,Lesional vs Back_scalp,-0.411949328,0.151389975,73,73,0.00817719,0.039683422,-1.40E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7200 superpathway of pyrimidine deoxyribonucleoside salvage,Body_site,Lesional vs Back_scalp,-1.418383062,0.532616204,73,57,0.009573733,0.045787418,-1.34E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+CALVIN PWY- Calvin Benson Bassham cycle,Body_site,Lesional vs Back_scalp,0.858529221,0.328819648,73,70,0.011008314,0.049091131,1.31E+00,Biosynthesis,Carbohydrate Biosynthesis
+PWY-7220 adenosine deoxyribonucleotides de novo biosynthesis II,Body_site,Lesional vs Back_scalp,-0.487373112,0.186100455,73,71,0.010778136,0.049091131,-1.31E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-7222 guanosine deoxyribonucleotides de novo biosynthesis II,Body_site,Lesional vs Back_scalp,-0.487373112,0.186100455,73,71,0.010778136,0.049091131,-1.31E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+RIBOSYN2 PWY- flavin biosynthesis I bacteria and plants ,Body_site,Lesional vs Back_scalp,-0.868225762,0.331374252,73,68,0.010743539,0.049091131,-1.31E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+SALVADEHYPOX PWY- adenosine nucleotides degradation II,Body_site,Lesional vs Back_scalp,1.981490055,0.758330442,73,68,0.010949213,0.049091131,1.31E+00,Degradation/Utilization/Assimilation,Nucleoside and Nucleotide Degradation
+PWY-7208 superpathway of pyrimidine nucleobases salvage,Body_site,Lesional vs Back_scalp,-0.366027079,0.140518371,73,71,0.011188678,0.049230182,-1.31E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+CATECHOL ORTHO CLEAVAGE PWY- catechol degradation to beta ketoadipate,Body_site,Lesional vs Non_Lesional,-2.978042143,0.782199776,64,23,0.000633212,0.037491609,-1.43E+00,Degradation/Utilization/Assimilation,Aromatic Compound Degradation
+HSERMETANA PWY- L methionine biosynthesis III,Body_site,Lesional vs Non_Lesional,1.143595349,0.330736571,64,63,0.001611387,0.037491609,1.43E+00,Biosynthesis,Amino Acid Biosynthesis
+ILEUSYN PWY- L isoleucine biosynthesis I from threonine ,Body_site,Lesional vs Non_Lesional,0.653184418,0.196287446,64,64,0.001476371,0.037491609,1.43E+00,Biosynthesis,Amino Acid Biosynthesis
+P441 PWY- superpathway of N acetylneuraminate degradation,Body_site,Lesional vs Non_Lesional,-2.494025672,0.719671485,64,38,0.001579364,0.037491609,-1.43E+00,Degradation/Utilization/Assimilation,Carboxylate Degradation
+PWY-5103 L isoleucine biosynthesis III,Body_site,Lesional vs Non_Lesional,0.763919959,0.225816702,64,64,0.001247201,0.037491609,1.43E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-5415 catechol degradation I meta cleavage pathway ,Body_site,Lesional vs Non_Lesional,-2.138417028,0.61444427,64,24,0.001539758,0.037491609,-1.43E+00,Degradation/Utilization/Assimilation,Aromatic Compound Degradation
+PWY-6121 5 aminoimidazole ribonucleotide biosynthesis I,Body_site,Lesional vs Non_Lesional,-0.239506547,0.066680362,64,64,0.001148815,0.037491609,-1.43E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-6147 6 hydroxymethyl dihydropterin diphosphate biosynthesis I,Body_site,Lesional vs Non_Lesional,-1.044805703,0.299818734,64,60,0.001452428,0.037491609,-1.43E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6823 molybdopterin biosynthesis,Body_site,Lesional vs Non_Lesional,-0.698193447,0.186453003,64,63,0.000760128,0.037491609,-1.43E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7039 phosphatidate metabolism as a signaling molecule,Body_site,Lesional vs Non_Lesional,-2.945800081,0.720289882,64,44,0.000274074,0.037491609,-1.43E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-7111 pyruvate fermentation to isobutanol engineered ,Body_site,Lesional vs Non_Lesional,0.77414369,0.22509806,64,64,0.001048735,0.037491609,1.43E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-7383 anaerobic energy metabolism invertebrates cytosol ,Body_site,Lesional vs Non_Lesional,1.229665633,0.352022162,64,62,0.001455197,0.037491609,1.43E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-7851 coenzyme A biosynthesis II eukaryotic ,Body_site,Lesional vs Non_Lesional,-0.614336017,0.169422031,64,59,0.000990328,0.037491609,-1.43E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY0 1586 peptidoglycan maturation meso diaminopimelate containing ,Body_site,Lesional vs Non_Lesional,2.262376197,0.51374426,64,64,0.000116436,0.037491609,1.43E+00,Biosynthesis,Cell Structure Biosynthesis
+UDPNACETYLGALSYN PWY- UDP N acetyl D glucosamine biosynthesis II,Body_site,Lesional vs Non_Lesional,-2.890011009,0.768908734,64,42,0.000690318,0.037491609,-1.43E+00,Biosynthesis,Carbohydrate Biosynthesis
+PWY-5130 2 oxobutanoate degradation I,Body_site,Lesional vs Non_Lesional,-2.061031772,0.636423787,64,22,0.001932433,0.037865106,-1.42E+00,Degradation/Utilization/Assimilation,Carboxylate Degradation
+PWY-7977 L methionine biosynthesis IV,Body_site,Lesional vs Non_Lesional,1.379077878,0.40750184,64,62,0.001952928,0.037865106,1.42E+00,Biosynthesis,Amino Acid Biosynthesis
+UDPNAGSYN PWY- UDP N acetyl D glucosamine biosynthesis I,Body_site,Lesional vs Non_Lesional,-0.369051508,0.108190865,64,64,0.001822489,0.037865106,-1.42E+00,Biosynthesis,Carbohydrate Biosynthesis
+COA PWY-1 superpathway of coenzyme A biosynthesis III mammals ,Body_site,Lesional vs Non_Lesional,-0.830446656,0.259280985,64,58,0.00214882,0.039470429,-1.40E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-6590 superpathway of Clostridium acetobutylicum acidogenic fermentation,Body_site,Lesional vs Non_Lesional,-2.365965361,0.716737456,64,22,0.002489297,0.043438241,-1.36E+00,Generation of Precursor Metabolites and Energy,Fermentation
+CENTFERM PWY- pyruvate fermentation to butanoate,Body_site,Lesional vs Non_Lesional,-2.364814863,0.72063716,64,22,0.002618371,0.043514825,-1.36E+00,Generation of Precursor Metabolites and Energy,Fermentation
+PWY-7560 methylerythritol phosphate pathway II,Body_site,Lesional vs Non_Lesional,-0.887468923,0.285825803,64,60,0.002868,0.043518782,-1.36E+00,Biosynthesis,Secondary Metabolite Biosynthesis
+PWY66 409 superpathway of purine nucleotide salvage,Body_site,Lesional vs Non_Lesional,-0.818210882,0.262934073,64,58,0.002810596,0.043518782,-1.36E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+BRANCHED CHAIN AA SYN PWY- superpathway of branched chain amino acid biosynthesis,Body_site,Lesional vs Non_Lesional,0.540968562,0.175317262,64,64,0.003033752,0.044115804,1.36E+00,Biosynthesis,Amino Acid Biosynthesis
+HISTSYN PWY- L histidine biosynthesis,Body_site,Lesional vs Non_Lesional,-0.786267717,0.25819769,64,60,0.003410998,0.045442582,-1.34E+00,Biosynthesis,Amino Acid Biosynthesis
+PWY-5180 toluene degradation I aerobic  via o cresol ,Body_site,Lesional vs Non_Lesional,-1.543366558,0.487966129,64,24,0.003535799,0.045442582,-1.34E+00,Degradation/Utilization/Assimilation,Aromatic Compound Degradation
+PWY-5873 ubiquinol 7 biosynthesis late decarboxylation ,Body_site,Lesional vs Non_Lesional,-2.20640027,0.701171728,64,41,0.003645823,0.045442582,-1.34E+00,Biosynthesis,"Cofactor, Carrier, and Vitamin Biosynthesis"
+PWY-7211 superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis,Body_site,Lesional vs Non_Lesional,-3.054698299,0.969749304,64,40,0.003569452,0.045442582,-1.34E+00,Biosynthesis,Nucleoside and Nucleotide Biosynthesis
+PWY-5188 tetrapyrrole biosynthesis I from glutamate ,Body_site,Lesional vs Non_Lesional,-0.527107122,0.170527844,64,63,0.00413851,0.047294902,-1.33E+00,Biosynthesis,Tetrapyrrole Biosynthesis
+PWY-6387 UDP N acetylmuramoyl pentapeptide biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Non_Lesional,-0.214513464,0.068831745,64,64,0.003948786,0.047294902,-1.33E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY66 389 phytol degradation,Body_site,Lesional vs Non_Lesional,1.382309856,0.465026383,64,63,0.00420098,0.047294902,1.33E+00,Degradation/Utilization/Assimilation,Alcohol Degradation
+PEPTIDOGLYCANSYN PWY- peptidoglycan biosynthesis I meso diaminopimelate containing ,Body_site,Lesional vs Non_Lesional,-0.194733411,0.06397414,64,64,0.004749236,0.049369602,-1.31E+00,Biosynthesis,Cell Structure Biosynthesis
+PWY-5080 very long chain fatty acid biosynthesis I,Body_site,Lesional vs Non_Lesional,-2.116693972,0.698477225,64,33,0.004809646,0.049369602,-1.31E+00,Biosynthesis,Fatty Acid and Lipid Biosynthesis
+PWY-8187 L arginine degradation XIII reductive Stickland reaction ,Body_site,Lesional vs Non_Lesional,-0.408075827,0.132214423,64,64,0.004532032,0.049369602,-1.31E+00,Degradation/Utilization/Assimilation,Amino Acid Degradation

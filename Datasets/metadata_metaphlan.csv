@@ -1,0 +1,148 @@
+Sample,subjectID,Sample_name,Body_site,Body_site_2,Study,Pool,Library_Concentration_ng_uL,Age,Sex,Weight_kg,Length_cm,BMI,DNAExtraction_method
+X16B1NL,MAN-16,X16B1NL_CP04272_S343_L001,Non_Lesional,Non_Lesional,Mango,Scalp psoriasis,0.928,43,F,60.8,166,22.06,DNEasy
+X17B1L,MAN-17,X17B1L_CP04272_S344_L001,Lesional,Lesional,Mango,Scalp psoriasis,1.41,40,F,61.6,166,22.35,DNEasy
+X17B1NL,MAN-17,X17B1NL_CP04272_S273_L001,Non_Lesional,Non_Lesional,Mango,Scalp psoriasis,1.96,40,F,61.6,166,22.35,DNEasy
+X2B1L,MAN-2,X2B1L_CP04272_S276_L001,Lesional,Lesional,Mango,Scalp psoriasis,2.98,50,F,78.6,163,29.58,DNEasy
+X2B1NL,MAN-2,X2B1NL_CP04272_S277_L001,Non_Lesional,Non_Lesional,Mango,Scalp psoriasis,1.17,50,F,78.6,163,29.58,DNEasy
+X9B1L,MAN-9,X9B1L_CP04272_S278_L001,Lesional,Lesional,Mango,Scalp psoriasis,2.51,36,F,68.2,170.5,23.46,DNEasy
+X9B1NL,MAN-9,X9B1NL_CP04272_S279_L001,Non_Lesional,Non_Lesional,Mango,Scalp psoriasis,0.466,36,F,68.2,170.5,23.46,DNEasy
+P001,UZG1,P001_CP04272_S282_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,3.53,66,F,61.7,NA,NA,Phenol
+P002,UZG1,P002_CP04272_S283_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,2.91,66,F,61.7,NA,NA,Phenol
+P003,UZG2,P003_CP04272_S284_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,2.52,24,F,NA,NA,NA,Phenol
+P004,UZG2,P004_CP04272_S285_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,3.72,24,F,NA,NA,NA,Phenol
+P005,AZ1,P005_CP04272_S286_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,1.79,87,M,75,165,27.55,Phenol
+P006,AZ1,P006_CP04272_S287_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,2.34,87,M,75,165,27.55,Phenol
+P009,AZ3,P009_CP04272_S288_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,4.88,53,F,60,155,24.97,DNEasy
+P010,AZ3,P010_CP04272_S289_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,3.94,53,F,60,155,24.97,DNEasy
+P011,AZ4,P011_CP04272_S290_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,1.52,23,F,53,160,20.7,DNEasy
+P012,AZ4,P012_CP04272_S291_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,0.067,23,F,53,160,20.7,DNEasy
+P013,UZG3,P013_CP04272_S292_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,3.8,65,F,NA,NA,NA,DNEasy
+P014,UZG3,P014_CP04272_S293_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,1.14,65,F,NA,NA,NA,DNEasy
+P015,AZ5,P015_CP04272_S294_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,4.28,27,F,52,163,19.57,DNEasy
+P016,AZ5,P016_CP04272_S295_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.9,27,F,52,163,19.57,DNEasy
+P017,UZG4,P017_CP04272_S296_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,4.14,21,F,60,164,22.31,DNEasy
+P018,UZG4,P018_CP04272_S297_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,0.396,21,F,60,164,22.31,DNEasy
+P019,UZG5,P019_CP04272_S298_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,3.17,24,M,96.6,183,28.85,DNEasy
+P020,UZG5,P020_CP04272_S299_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,1.36,24,M,96.6,183,28.85,DNEasy
+P021,AZ6,P021_CP04272_S300_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.93,37,F,72,175,23.51,DNEasy
+P022,AZ6,P022_CP04272_S301_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,0.559,37,F,72,175,23.51,DNEasy
+P023,AZ7,P023_CP04272_S302_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.34,38,F,69,169,24.16,DNEasy
+P024,AZ7,P024_CP04272_S303_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.65,38,F,69,169,24.16,DNEasy
+P025,AZ8,P025_CP04272_S304_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.55,64,M,85,178,26.83,DNEasy
+P026,AZ8,P026_CP04272_S305_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,4.18,64,M,85,178,26.83,DNEasy
+P027,AZ9,P027_CP04272_S306_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.04,71,M,100,177,31.92,DNEasy
+P028,AZ9,P028_CP04272_S307_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,4.31,71,M,100,177,31.92,DNEasy
+P029,UZG6,P029_CP04272_S308_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,3.36,19,M,93,186,26.88,DNEasy
+P030,UZG6,P030_CP04272_S309_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,4.42,19,M,93,186,26.88,DNEasy
+P031,UZG7,P031_CP04272_S310_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,4.26,23,M,85,181,25.95,DNEasy
+P032,UZG7,P032_CP04272_S311_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,1.61,23,M,85,181,25.95,DNEasy
+P033,AZ10,P033_CP04272_S312_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.6,56,M,90,163,33.87,DNEasy
+P034,AZ10,P034_CP04272_S313_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.96,56,M,90,163,33.87,DNEasy
+P035,AZ11,P035_CP04272_S314_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.87,61,M,95,183,28.37,DNEasy
+P036,AZ11,P036_CP04272_S315_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,NA,61,M,95,183,28.37,DNEasy
+P037,AZ12,P037_CP04272_S316_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.65,25,F,49,163,18.44,DNEasy
+P038,AZ12,P038_CP04272_S317_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.68,25,F,49,163,18.44,DNEasy
+P039,AZ13,P039_CP04272_S318_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.35,65,F,81,171,27.7,DNEasy
+P040,AZ13,P040_CP04272_S319_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,0.743,65,F,81,171,27.7,DNEasy
+P041,AZ14,P041_CP04272_S320_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.46,54,F,105,173,35.08,DNEasy
+P042,AZ14,P042_CP04272_S321_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.67,54,F,105,173,35.08,DNEasy
+P043,UZG8,P043_CP04272_S322_L001,Lesional,Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,2.66,22,F,105,174,34.68,DNEasy
+P044,UZG8,P044_CP04272_S323_L001,Non_Lesional,Non_Lesional,Dermatology Research Unit (DRU),Scalp psoriasis,NA,22,F,105,174,34.68,DNEasy
+P045,AZ15,P045_CP04272_S324_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,4.82,59,F,75,160,29.3,DNEasy
+P046,AZ15,P046_CP04272_S325_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,3.26,59,F,75,160,29.3,DNEasy
+P047,AZ16,P047_CP04272_S326_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,2.77,69,F,83,157,33.67,DNEasy
+P048,AZ16,P048_CP04272_S327_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,4.99,69,F,83,157,33.67,DNEasy
+P049,AZ17,P049_CP04272_S328_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.55,41,F,84,176,27.12,DNEasy
+P050,AZ17,P050_CP04272_S329_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,2.76,41,F,84,176,27.12,DNEasy
+P051,AZ18,P051_CP04272_S330_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.66,54,F,62,165,22.77,DNEasy
+P052,AZ18,P052_CP04272_S331_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,0.183,54,F,62,165,22.77,DNEasy
+P053,AZ19,P053_CP04272_S332_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,1.87,29,F,55,173,18.38,DNEasy
+P055,AZ20,P055_CP04272_S333_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,3.41,30,F,65,176,20.98,DNEasy
+P056,AZ20,P056_CP04272_S334_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,1.2,30,F,65,176,20.98,DNEasy
+P057,AZ21,P057_CP04272_S335_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,1.93,43,F,73,160,28.52,DNEasy
+P058,AZ21,P058_CP04272_S336_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,5.43,30,F,65,176,20.98,DNEasy
+P059,AZ22,P059_CP04272_S337_L001,Lesional,Lesional,AZ Delta,Scalp psoriasis,6.11,54,F,82,158,32.85,DNEasy
+P060,AZ22,P060_CP04272_S338_L001,Non_Lesional,Non_Lesional,AZ Delta,Scalp psoriasis,5.19,54,F,82,158,32.85,DNEasy
+SoS002a,SoS002,SoS002a_CP04272_S177_L001,Back_scalp,Healthy,SoS,Healthy,12.4,51,F,95,172,32.11,DNEasy
+SoS002b,SoS002,SoS002b_CP04272_S178_L001,Top_scalp,Healthy,SoS,Healthy,8.88,51,F,95,172,32.11,DNEasy
+SoS004a,SoS004,SoS004a_CP04272_S179_L001,Back_scalp,Healthy,SoS,Healthy,6.64,54,M,96,176,30.99,DNEasy
+SoS004b,SoS004,SoS004b_CP04272_S180_L001,Top_scalp,Healthy,SoS,Healthy,6.16,54,M,96,176,30.99,DNEasy
+SoS005a,SoS005,SoS005a_CP04272_S181_L001,Back_scalp,Healthy,SoS,Healthy,1.18,28,M,90,181,27.47,DNEasy
+SoS005b,SoS005,SoS005b_CP04272_S182_L001,Top_scalp,Healthy,SoS,Healthy,2.72,28,M,90,181,27.47,DNEasy
+SoS006a,SoS006,SoS006a_CP04272_S183_L001,Back_scalp,Healthy,SoS,Healthy,4.96,46,F,75,163,28.23,DNEasy
+SoS006b,SoS006,SoS006b_CP04272_S184_L001,Top_scalp,Healthy,SoS,Healthy,7.82,46,F,75,163,28.23,DNEasy
+SoS008a,SoS008,SoS008a_CP04272_S185_L001,Back_scalp,Healthy,SoS,Healthy,0.666,24,F,60,180,18.52,DNEasy
+SoS008b,SoS008,SoS008b_CP04272_S186_L001,Top_scalp,Healthy,SoS,Healthy,0.67,24,F,60,180,18.52,DNEasy
+SoS011a,SoS011,SoS011a_CP04272_S187_L001,Back_scalp,Healthy,SoS,Healthy,7.56,30,M,113,187,32.31,DNEasy
+SoS011b,SoS011,SoS011b_CP04272_S188_L001,Top_scalp,Healthy,SoS,Healthy,8,30,M,113,187,32.31,DNEasy
+SoS014a,SoS014,SoS014a_CP04272_S189_L001,Back_scalp,Healthy,SoS,Healthy,1.41,51,F,97,176,31.31,DNEasy
+SoS014b,SoS014,SoS014b_CP04272_S190_L001,Top_scalp,Healthy,SoS,Healthy,1.71,51,F,97,176,31.31,DNEasy
+SoS017a,SoS017,SoS017a_CP04272_S191_L001,Back_scalp,Healthy,SoS,Healthy,0.518,60,F,53,161,20.45,DNEasy
+SoS017b,SoS017,SoS017b_CP04272_S192_L001,Top_scalp,Healthy,SoS,Healthy,0.702,60,F,53,161,20.45,DNEasy
+SoS018a,SoS018,SoS018a_CP04272_S193_L001,Back_scalp,Healthy,SoS,Healthy,4.3,60,M,74,185,21.62,DNEasy
+SoS018b,SoS018,SoS018b_CP04272_S194_L001,Top_scalp,Healthy,SoS,Healthy,7.84,60,M,74,185,21.62,DNEasy
+SoS023a,SoS023,SoS023a_CP04272_S195_L001,Back_scalp,Healthy,SoS,Healthy,9.26,52,M,106,176,34.22,DNEasy
+SoS023b,SoS023,SoS023b_CP04272_S196_L001,Top_scalp,Healthy,SoS,Healthy,5.94,52,M,106,176,34.22,DNEasy
+SoS024a,SoS024,SoS024a_CP04272_S197_L001,Back_scalp,Healthy,SoS,Healthy,2.22,30,F,64,167,22.95,DNEasy
+SoS024b,SoS024,SoS024b_CP04272_S198_L001,Top_scalp,Healthy,SoS,Healthy,2.26,30,F,64,167,22.95,DNEasy
+SoS025a,SoS025,SoS025a_CP04272_S199_L001,Back_scalp,Healthy,SoS,Healthy,1.2,30,F,63.7,160,24.88,DNEasy
+SoS025b,SoS025,SoS025b_CP04272_S200_L001,Top_scalp,Healthy,SoS,Healthy,8.44,30,F,63.7,160,24.88,DNEasy
+SoS027b,SoS027,SoS027b_CP04272_S202_L001,Top_scalp,Healthy,SoS,Healthy,13.3,35,M,105,183,31.35,DNEasy
+SoS031b,SoS031,SoS031b_CP04272_S206_L001,Top_scalp,Healthy,SoS,Healthy,8.68,65,M,87,168,30.82,DNEasy
+SoS033a,SoS033,SoS033a_CP04272_S207_L001,Back_scalp,Healthy,SoS,Healthy,3.68,28,M,75,184,22.15,DNEasy
+SoS035a,SoS035,SoS035a_CP04272_S209_L001,Back_scalp,Healthy,SoS,Healthy,0.196,26,F,60,167,21.51,DNEasy
+SoS035b,SoS035,SoS035b_CP04272_S210_L001,Top_scalp,Healthy,SoS,Healthy,0.938,26,F,60,167,21.51,DNEasy
+SoS036a,SoS036,SoS036a_CP04272_S211_L001,Back_scalp,Healthy,SoS,Healthy,0.732,32,F,68,160,26.56,DNEasy
+SoS036b,SoS036,SoS036b_CP04272_S212_L001,Top_scalp,Healthy,SoS,Healthy,0.734,32,F,68,160,26.56,DNEasy
+SoS039a,SoS039,SoS039a_CP04272_S213_L001,Back_scalp,Healthy,SoS,Healthy,7.92,53,M,78,178,24.62,DNEasy
+SoS039b,SoS039,SoS039b_CP04272_S214_L001,Top_scalp,Healthy,SoS,Healthy,1.47,53,M,78,178,24.62,DNEasy
+SoS042a,SoS042,SoS042a_CP04272_S215_L001,Back_scalp,Healthy,SoS,Healthy,6.14,28,M,62,169,21.71,DNEasy
+SoS042b,SoS042,SoS042b_CP04272_S216_L001,Top_scalp,Healthy,SoS,Healthy,11.4,28,M,62,169,21.71,DNEasy
+SoS055a,SoS055,SoS055a_CP04272_S217_L001,Back_scalp,Healthy,SoS,Healthy,7.56,28,F,88,176,28.41,DNEasy
+SoS055b,SoS055,SoS055b_CP04272_S218_L001,Top_scalp,Healthy,SoS,Healthy,7.08,28,F,88,176,28.41,DNEasy
+SoS060a,SoS060,SoS060a_CP04272_S219_L001,Back_scalp,Healthy,SoS,Healthy,2.4,25,F,58,162,22.1,DNEasy
+SoS060b,SoS060,SoS060b_CP04272_S220_L001,Top_scalp,Healthy,SoS,Healthy,4.58,25,F,58,162,22.1,DNEasy
+SoS063a,SoS063,SoS063a_CP04272_S221_L001,Back_scalp,Healthy,SoS,Healthy,8.58,68,F,64,162,24.39,DNEasy
+SoS063b,SoS063,SoS063b_CP04272_S222_L001,Top_scalp,Healthy,SoS,Healthy,5.6,68,F,64,162,24.39,DNEasy
+SoS065a,SoS065,SoS065a_CP04272_S223_L001,Back_scalp,Healthy,SoS,Healthy,8.46,37,F,64,164,23.8,DNEasy
+SoS065b,SoS065,SoS065b_CP04272_S224_L001,Top_scalp,Healthy,SoS,Healthy,6.4,37,F,64,164,23.8,DNEasy
+SoS069a,SoS069,SoS069a_CP04272_S225_L001,Back_scalp,Healthy,SoS,Healthy,7.48,35,F,65,170,22.49,DNEasy
+SoS069b,SoS069,SoS069b_CP04272_S226_L001,Top_scalp,Healthy,SoS,Healthy,7.86,35,F,65,170,22.49,DNEasy
+SoS070a,SoS070,SoS070a_CP04272_S227_L001,Back_scalp,Healthy,SoS,Healthy,5.64,74,M,71,178,22.41,DNEasy
+SoS070b,SoS070,SoS070b_CP04272_S228_L001,Top_scalp,Healthy,SoS,Healthy,8.12,74,M,71,178,22.41,DNEasy
+SoS073a,SoS073,SoS073a_CP04272_S229_L001,Back_scalp,Healthy,SoS,Healthy,5.46,48,M,81,181,24.72,DNEasy
+SoS073b,SoS073,SoS073b_CP04272_S230_L001,Top_scalp,Healthy,SoS,Healthy,4.64,48,M,81,181,24.72,DNEasy
+SoS075a,SoS075,SoS075a_CP04272_S231_L001,Back_scalp,Healthy,SoS,Healthy,2.94,51,M,91,185,26.59,DNEasy
+SoS075b,SoS075,SoS075b_CP04272_S232_L001,Top_scalp,Healthy,SoS,Healthy,4.06,51,M,91,185,26.59,DNEasy
+SoS077a,SoS077,SoS077a_CP04272_S233_L001,Back_scalp,Healthy,SoS,Healthy,6.56,51,F,52,163,19.57,DNEasy
+SoS077b,SoS077,SoS077b_CP04272_S234_L001,Top_scalp,Healthy,SoS,Healthy,6.54,51,F,52,163,19.57,DNEasy
+SoS078a,SoS078,SoS078a_CP04272_S235_L001,Back_scalp,Healthy,SoS,Healthy,8.7,59,M,85,188,24.05,DNEasy
+SoS078b,SoS078,SoS078b_CP04272_S236_L001,Top_scalp,Healthy,SoS,Healthy,8.58,59,M,85,188,24.05,DNEasy
+SoS079a,SoS079,SoS079a_CP04272_S237_L001,Back_scalp,Healthy,SoS,Healthy,4.04,32,M,75,180,23.15,DNEasy
+SoS079b,SoS079,SoS079b_CP04272_S238_L001,Top_scalp,Healthy,SoS,Healthy,6.98,32,M,75,180,23.15,DNEasy
+SoS080a,SoS080,SoS080a_CP04272_S239_L001,Back_scalp,Healthy,SoS,Healthy,3.1,27,F,60,169,21.01,DNEasy
+SoS080b,SoS080,SoS080b_CP04272_S240_L001,Top_scalp,Healthy,SoS,Healthy,4.92,27,F,60,169,21.01,DNEasy
+SoS081a,SoS081,SoS081a_CP04272_S241_L001,Back_scalp,Healthy,SoS,Healthy,3.58,26,F,120,178,37.87,DNEasy
+SoS081b,SoS081,SoS081b_CP04272_S242_L001,Top_scalp,Healthy,SoS,Healthy,0.428,26,F,120,178,37.87,DNEasy
+SoS082a,SoS082,SoS082a_CP04272_S243_L001,Back_scalp,Healthy,SoS,Healthy,4.48,33,F,97,172,32.79,DNEasy
+SoS082b,SoS082,SoS082b_CP04272_S244_L001,Top_scalp,Healthy,SoS,Healthy,2.9,33,F,97,172,32.79,DNEasy
+SoS085a,SoS085,SoS085a_CP04272_S245_L001,Back_scalp,Healthy,SoS,Healthy,1.92,37,M,88,180,27.16,DNEasy
+SoS085b,SoS085,SoS085b_CP04272_S246_L001,Top_scalp,Healthy,SoS,Healthy,2.68,37,M,88,180,27.16,DNEasy
+SoS087a,SoS087,SoS087a_CP04272_S247_L001,Back_scalp,Healthy,SoS,Healthy,4.86,46,F,61,163,22.96,DNEasy
+SoS087b,SoS087,SoS087b_CP04272_S248_L001,Top_scalp,Healthy,SoS,Healthy,5.78,46,F,61,163,22.96,DNEasy
+SoS091a,SoS091,SoS091a_CP04272_S249_L001,Back_scalp,Healthy,SoS,Healthy,1.19,30,M,87,180,26.85,DNEasy
+SoS091b,SoS091,SoS091b_CP04272_S250_L001,Top_scalp,Healthy,SoS,Healthy,2.5,30,M,87,180,26.85,DNEasy
+SoS098a,SoS098,SoS098a_CP04272_S251_L001,Back_scalp,Healthy,SoS,Healthy,2.2,33,F,56,158,22.43,DNEasy
+SoS098b,SoS098,SoS098b_CP04272_S252_L001,Top_scalp,Healthy,SoS,Healthy,1.24,33,F,56,158,22.43,DNEasy
+SoS099a,SoS099,SoS099a_CP04272_S253_L001,Back_scalp,Healthy,SoS,Healthy,3.78,35,F,99,176,31.96,DNEasy
+SoS099b,SoS099,SoS099b_CP04272_S254_L001,Top_scalp,Healthy,SoS,Healthy,4.14,35,F,99,176,31.96,DNEasy
+SoS100a,SoS100,SoS100a_CP04272_S255_L001,Top_scalp,Healthy,UGent,Healthy,4.08,24,F,58,167,20.8,DNEasy
+SoS100b,SoS100,SoS100b_CP04272_S256_L001,Back_scalp,Healthy,UGent,Healthy,2.76,24,F,58,167,20.8,DNEasy
+UG001,UG1,UG001_CP04272_S257_L001,Top_scalp,Healthy,UGent,Healthy,4.16,34,M,81,186,23.41,Phenol
+UG002,UG1,UG002_CP04272_S258_L001,Back_scalp,Healthy,UGent,Healthy,2.94,34,M,81,186,23.41,Phenol
+UG003,UG2,UG003_CP04272_S259_L001,Top_scalp,Healthy,UGent,Healthy,2.72,26,F,67,167,24.02,Phenol
+UG004,UG2,UG004_CP04272_S260_L001,Back_scalp,Healthy,UGent,Healthy,1.76,26,F,67,167,24.02,Phenol
+UG005,UG3,UG005_CP04272_S261_L001,Top_scalp,Healthy,UGent,Healthy,1.23,22,F,73,172,24.68,Phenol
+UG006,UG3,UG006_CP04272_S262_L001,Back_scalp,Healthy,UGent,Healthy,2.06,22,F,73,172,24.68,Phenol
+UG009,UG5,UG009_CP04272_S263_L001,Top_scalp,Healthy,UGent,Healthy,2.78,38,F,64,169,22.41,Phenol
+UG010,UG5,UG010_CP04272_S264_L001,Back_scalp,Healthy,UGent,Healthy,2.24,38,F,64,169,22.41,Phenol
