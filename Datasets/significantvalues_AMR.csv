@@ -1,0 +1,77 @@
+feature,metadata,value,coef,stderr,N,N.not.0,pval,qval,heatmap_value
+resistance-nodulation-cell division (RND) antibiotic efflux pump,Body_site,Lesional vs Top_scalp,1.392735544,0.172265216,74,74,1.0648E-11,8.94436E-10,9.048450724
+alm glycyltransferase polymyxin resistance operon,Body_site,Lesional vs Top_scalp,-4.164916392,0.624889865,74,55,4.55548E-09,1.9133E-07,-6.718216769
+Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins,Body_site,Lesional vs Top_scalp,-0.692759004,0.119693883,74,74,1.7227E-07,4.82356E-06,-5.316632731
+antibiotic-resistant isoleucyl-tRNA synthetase (ileS),Body_site,Lesional vs Top_scalp,-0.325610858,0.065069327,74,74,3.83745E-06,7.77901E-05,-4.109075394
+ glycopeptide resistance gene cluster vanK,Body_site,Lesional vs Top_scalp,-2.025689498,0.416401763,74,70,6.53836E-06,7.77901E-05,-4.109075394
+Cfr 23S ribosomal RNA methyltransferase,Body_site,Lesional vs Top_scalp,-0.885596599,0.179600165,74,72,5.08005E-06,7.77901E-05,-4.109075394
+Van ligase glycopeptide resistance gene cluster,Body_site,Lesional vs Top_scalp,-1.005596931,0.208119201,74,72,7.40859E-06,7.77901E-05,-4.109075394
+GOB beta-lactamase,Body_site,Lesional vs Top_scalp,-1.523684282,0.315221102,74,64,7.35629E-06,7.77901E-05,-4.109075394
+vga-type ABC-F protein,Body_site,Lesional vs Top_scalp,-0.472177247,0.100197908,74,74,1.16193E-05,0.000108447,-3.964783858
+undecaprenyl pyrophosphate related proteins,Body_site,Lesional vs Top_scalp,-0.592742774,0.136253623,74,71,4.40456E-05,0.000369983,-3.431817935
+helicase-like RNA polymerase protection protein,Body_site,Lesional vs Top_scalp,-1.600974809,0.375785746,74,68,6.08273E-05,0.000464499,-3.33301512
+rifamycin-resistant beta-subunit of RNA polymerase (rpoB),Body_site,Lesional vs Top_scalp,-0.302973403,0.077123203,74,74,0.0001941,0.001358701,-2.866876114
+sulfonamide resistant sul,Body_site,Lesional vs Top_scalp,-0.679401579,0.176114699,74,72,0.000246897,0.001595336,-2.797147817
+non-erm 23S ribosomal RNA methyltransferase (G748),Body_site,Lesional vs Top_scalp,-1.58843932,0.435936412,74,69,0.000503698,0.003022187,-2.519678615
+streptogramin vat acetyltransferase,Body_site,Lesional vs Top_scalp,-0.757498226,0.209783359,74,66,0.000560858,0.003140807,-2.502958724
+RbpA bacterial RNA polymerase-binding protein,Body_site,Lesional vs Top_scalp,-1.12393019,0.315194426,74,67,0.000649205,0.003408324,-2.467459069
+ATP-binding cassette (ABC) antibiotic efflux pump,Body_site,Lesional vs Top_scalp,-0.191158182,0.055307157,74,74,0.000922467,0.004558074,-2.34121861
+glycopeptide resistance gene cluster vanH,Body_site,Lesional vs Top_scalp,-0.388919889,0.114322745,74,74,0.001095496,0.005112313,-2.291382545
+multidrug and toxic compound extrusion (MATE) transporter,Body_site,Lesional vs Top_scalp,2.372104168,0.710256693,74,66,0.00133083,0.005883668,2.230351877
+General Bacterial Porin with reduced permeability to beta-lactams,Body_site,Lesional vs Top_scalp,2.38111196,0.71938799,74,48,0.00146015,0.006132628,2.21235338
+tetracycline-resistant ribosomal protection protein,Body_site,Lesional vs Top_scalp,-0.356156579,0.108901927,74,74,0.001649261,0.006365397,-2.196174472
+rifampin monooxygenase,Body_site,Lesional vs Top_scalp,-0.946935401,0.289855065,74,68,0.001667128,0.006365397,-2.196174472
+lsa-type ABC-F protein,Body_site,Lesional vs Top_scalp,-0.673899226,0.215431056,74,70,0.002539065,0.009273106,-2.032774764
+non-erm 23S ribosomal RNA methyltransferase (A1067),Body_site,Lesional vs Top_scalp,-2.240641948,0.723178916,74,38,0.002775165,0.009713079,-2.012643073
+major facilitator superfamily (MFS) antibiotic efflux pump,Body_site,Lesional vs Top_scalp,0.310932024,0.102745361,74,74,0.003433021,0.011516043,1.938696733
+pmr phosphoethanolamine transferase,Body_site,Lesional vs Top_scalp,-0.439515948,0.146482962,74,74,0.003701585,0.011516043,-1.938696733
+lincosamide nucleotidyltransferase (LNU),Body_site,Lesional vs Top_scalp,-0.710412275,0.236221939,74,66,0.003627482,0.011516043,-1.938696733
+Erm 23S ribosomal RNA methyltransferase,Body_site,Lesional vs Top_scalp,-0.613407868,0.212747045,74,68,0.005186027,0.015558082,-1.808043933
+trimethoprim resistant dihydrofolate reductase dfr,Body_site,Lesional vs Top_scalp,-0.592394199,0.209299911,74,71,0.006022018,0.017443086,-1.758376687
+sal-type ABC-F protein,Body_site,Lesional vs Top_scalp,-0.45881622,0.16958952,74,72,0.008509367,0.023826227,-1.622944727
+kdpDE,Body_site,Lesional vs Top_scalp,-0.289361313,0.117618259,74,74,0.016287829,0.044134763,-1.3552192
+resistance-nodulation-cell division (RND) antibiotic efflux pump,Body_site,Lesional vs Back_scalp,1.383349985,0.179682288,73,73,6.04382E-11,4.95593E-09,8.304874572
+alm glycyltransferase polymyxin resistance operon,Body_site,Lesional vs Back_scalp,-2.037441676,0.370738778,73,53,5.75175E-07,2.35822E-05,-4.627415851
+GOB beta-lactamase,Body_site,Lesional vs Back_scalp,-1.425124078,0.322738045,73,63,3.52746E-05,0.000964172,-3.015845437
+Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins,Body_site,Lesional vs Back_scalp,-0.575257606,0.135064535,73,73,6.1905E-05,0.001269053,-2.896520375
+antibiotic-resistant isoleucyl-tRNA synthetase (ileS),Body_site,Lesional vs Back_scalp,-0.26080557,0.065593647,73,73,0.000166582,0.001707464,-2.767648428
+ glycopeptide resistance gene cluster vanK,Body_site,Lesional vs Back_scalp,-1.788689614,0.444833587,73,69,0.000142692,0.001707464,-2.767648428
+glycopeptide resistance gene cluster vanH,Body_site,Lesional vs Back_scalp,-0.475032268,0.115627502,73,73,0.000105375,0.001707464,-2.767648428
+Van ligase glycopeptide resistance gene cluster,Body_site,Lesional vs Back_scalp,-0.898519724,0.224797768,73,71,0.000155014,0.001707464,-2.767648428
+helicase-like RNA polymerase protection protein,Body_site,Lesional vs Back_scalp,-1.459693868,0.382198232,73,67,0.000283798,0.002042421,-2.689854653
+vga-type ABC-F protein,Body_site,Lesional vs Back_scalp,-0.419068414,0.108501438,73,73,0.000245422,0.002042421,-2.689854653
+Cfr 23S ribosomal RNA methyltransferase,Body_site,Lesional vs Back_scalp,-0.738557843,0.194165196,73,71,0.000298891,0.002042421,-2.689854653
+undecaprenyl pyrophosphate related proteins,Body_site,Lesional vs Back_scalp,-0.558256483,0.144958489,73,70,0.000254867,0.002042421,-2.689854653
+rifamycin-resistant beta-subunit of RNA polymerase (rpoB),Body_site,Lesional vs Back_scalp,-0.294666161,0.080082534,73,73,0.000451476,0.002847773,-2.545494678
+streptogramin vat acetyltransferase,Body_site,Lesional vs Back_scalp,-0.77961237,0.215769214,73,65,0.00056094,0.003285507,-2.483397543
+MYX beta-lactamase,Body_site,Lesional vs Back_scalp,-1.850291941,0.531543989,73,25,0.000858579,0.004693568,-2.328496909
+kdpDE,Body_site,Lesional vs Back_scalp,-0.419097118,0.126811364,73,73,0.001491551,0.0076442,-2.11666796
+sulfonamide resistant sul,Body_site,Lesional vs Back_scalp,-0.583347265,0.177673079,73,71,0.001594321,0.007690256,-2.114059213
+General Bacterial Porin with reduced permeability to beta-lactams,Body_site,Lesional vs Back_scalp,2.700212366,0.84315884,73,43,0.002040019,0.009293418,2.03182452
+tetracycline-resistant ribosomal protection protein,Body_site,Lesional vs Back_scalp,-0.342441092,0.109052395,73,73,0.002461228,0.010622142,-1.973787908
+RbpA bacterial RNA polymerase-binding protein,Body_site,Lesional vs Back_scalp,-0.997593306,0.319682644,73,66,0.00260944,0.010698702,-1.970668904
+non-erm 23S ribosomal RNA methyltransferase (A1067),Body_site,Lesional vs Back_scalp,-2.283815592,0.758081737,73,36,0.003587519,0.014008407,-1.853611249
+lincosamide nucleotidyltransferase (LNU),Body_site,Lesional vs Back_scalp,-0.712707795,0.238050066,73,65,0.003788024,0.014118999,-1.850196083
+ATP-binding cassette (ABC) antibiotic efflux pump,Body_site,Lesional vs Back_scalp,-0.170595005,0.057474282,73,73,0.004081358,0.014550929,-1.837109293
+trimethoprim resistant dihydrofolate reductase dfr,Body_site,Lesional vs Back_scalp,-0.617172173,0.212128416,73,70,0.004831604,0.016219201,-1.789970538
+non-erm 23S ribosomal RNA methyltransferase (G748),Body_site,Lesional vs Back_scalp,-1.360697145,0.468996004,73,68,0.004944878,0.016219201,-1.789970538
+lsa-type ABC-F protein,Body_site,Lesional vs Back_scalp,-0.613366594,0.220510525,73,69,0.006923069,0.021834296,-1.660860811
+Erm 23S ribosomal RNA methyltransferase,Body_site,Lesional vs Back_scalp,-0.623045964,0.225819525,73,67,0.007368217,0.022377548,-1.650187511
+multidrug and toxic compound extrusion (MATE) transporter,Body_site,Lesional vs Back_scalp,1.991606149,0.739552608,73,65,0.008828604,0.025855198,1.587452136
+rifampin monooxygenase,Body_site,Lesional vs Back_scalp,-0.802361543,0.304391219,73,67,0.01029695,0.029115514,-1.535875532
+ATP-binding cassette (ABC) antibiotic efflux pump major facilitator superfamily (MFS) antibiotic efflux pump,Body_site,Lesional vs Back_scalp,-0.682605506,0.268383033,73,69,0.013157385,0.035963518,-1.444137831
+resistance-nodulation-cell division (RND) antibiotic efflux pump,Body_site,Lesional vs Non_Lesional,1.030708169,0.221260506,64,64,5.93E-05,0.005253175,2.279578141
+fosfomycin thiol transferase,Body_site,Lesional vs Non_Lesional,-2.272000686,0.512081436,64,39,0.000112972,0.005253175,-2.279578141
+alm glycyltransferase polymyxin resistance operon,Body_site,Lesional vs Non_Lesional,-2.373963239,0.62410927,64,42,0.000607529,0.018833391,-1.725071488
+kdpDE,Body_site,Lesional vs Non_Lesional,-0.360345572,0.101287182,64,64,0.001386932,0.032246158,-1.491522028
+Erm 23S ribosomal RNA methyltransferase,Body_site,Lesional vs Non_Lesional,-0.76882967,0.22696947,64,58,0.001931487,0.03592565,-1.444595364
+Miscellaneous ABC-F subfamily ATP-binding cassette ribosomal protection proteins,Body_site,Lesional vs Non_Lesional,-0.47092893,0.149063008,64,64,0.002445215,0.037900833,-1.421351244
+lsa-type ABC-F protein,Body_site,Lesional vs Non_Lesional,-0.776241635,0.251579196,64,60,0.003035328,0.040326507,-1.394409398
+BlaZ beta-lactamase,Body_site,Non_Lesional vs Top_scalp,3.176216351,0.622309743,74,44,2.60909E-06,0.0002009,3.697020235
+tetracycline-resistant ribosomal protection protein,Body_site,Non_Lesional vs Top_scalp,-0.187000899,0.050494578,74,74,0.000413875,0.01593418,-1.797670279
+Cfr 23S ribosomal RNA methyltransferase,Body_site,Non_Lesional vs Top_scalp,-0.478369445,0.145706056,74,74,0.001586153,0.030533444,-1.515224202
+sulfonamide resistant sul,Body_site,Non_Lesional vs Top_scalp,-0.280479491,0.085088146,74,74,0.001522738,0.030533444,-1.515224202
+BlaZ beta-lactamase,Body_site,Non_Lesional vs Back_scalp,2.428044201,0.599301882,73,43,0.000128431,0.010402893,1.982845878
+tetracycline-resistant ribosomal protection protein,Body_site,Non_Lesional vs Back_scalp,-0.173285412,0.048495317,73,73,0.000638536,0.017240463,-1.763451076
+CARB beta-lactamase,Body_site,Non_Lesional vs Back_scalp,1.801211687,0.492639957,73,24,0.000487344,0.017240463,1.763451076
+glycopeptide resistance gene cluster vanH,Body_site,Non_Lesional vs Back_scalp,-0.249631707,0.074025223,73,73,0.001209919,0.024500858,-1.610818704
