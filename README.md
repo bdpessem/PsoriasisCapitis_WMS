@@ -33,4 +33,4 @@ The "datasets" directory houses tables containing relative abundance data and es
 
 # Reference
 
-If you intend to utilise or expand upon this code, please refer to De Pessemier _et al._, (2023) Comparative whole metagenome sequencing analysis in lesional and non-lesional scalp areas of psoriasis capitis patients and healthy individuals. voL. X, pp. XX
+If you intend to utilise or expand upon this code, please refer to De Pessemier _et al._, (2024) Comparative whole metagenome sequencing analysis in lesional and non-lesional scalp areas of psoriasis capitis patients and healthy individuals. voL. X, pp. XX
